@@ -1,0 +1,859 @@
+/* ==========================================================================
+   Attendify — Fase 1 UI Stylesheet ("Yurameku" Night Neon Palette)
+   Inspired by 25-ji, Nightcord de. — Hoshi wo Sagashite ♭♭
+   Palette:
+     - Royal Indigo (Primary): #2E3AC7
+     - Night Blue (Gradient):  #1E2A78
+     - Deep Navy (Dark BG):    #0D1442
+     - Neon Cyan (Accent):     #5AD8E6
+     - Neon Pink (Accent):     #F7A8D8
+     - Neon Amber (Accent):    #FFC94D
+     - Starlight White:        #FFFFFF
+     - Light Page Surface:     #F4F6FE
+   Strictly NO green/emerald hues.
+   ========================================================================== */
+
+@import url('https://rsms.me/inter/inter.css');
+
+:root {
+    --att-indigo: #2E3AC7;
+    --att-night: #1E2A78;
+    --att-navy: #0D1442;
+    --att-cyan: #5AD8E6;
+    --att-pink: #F7A8D8;
+    --att-amber: #FFC94D;
+    --att-white: #FFFFFF;
+    --att-bg-light: #F4F6FE;
+    --att-text-main: #151B4A;
+    --att-text-muted: #5E6696;
+    --att-border-soft: rgba(46, 58, 199, 0.10);
+    --att-shadow: 0 8px 24px rgba(46, 58, 199, 0.12);
+    --att-shadow-hover: 0 12px 28px rgba(46, 58, 199, 0.18);
+    --att-radius: 16px;
+    --att-radius-lg: 24px;
+}
+
+html,
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    color: var(--att-text-main);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Override MobileKit / Bootstrap primary colors to Royal Indigo (#2E3AC7) */
+.bg-primary {
+    background-color: var(--att-indigo) !important;
+}
+
+.text-primary {
+    color: var(--att-indigo) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--att-indigo) 0%, var(--att-night) 100%) !important;
+    border-color: var(--att-indigo) !important;
+    color: var(--att-white) !important;
+    box-shadow: 0 6px 18px rgba(46, 58, 199, 0.28);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background: linear-gradient(135deg, #3542D9 0%, var(--att-indigo) 100%) !important;
+    border-color: var(--att-cyan) !important;
+    box-shadow: 0 0 0 3px rgba(90, 216, 230, 0.32), 0 8px 22px rgba(46, 58, 199, 0.34) !important;
+    transform: translateY(-1px);
+}
+
+#loader {
+    background-color: var(--att-navy) !important;
+}
+
+/* ==========================================================================
+   1. LOGIN PAGE — Night Neon ("Yurameku") Starry Sky & Frosted Card
+   ========================================================================== */
+
+body.attendify-login-body {
+    min-height: 100vh;
+    backgroundColor: var(--att-navy);
+    background-image:
+        radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.75) 0, rgba(255, 255, 255, 0.75) 1.5px, transparent 2.5px),
+        radial-gradient(circle at 84% 14%, rgba(90, 216, 230, 0.85) 0, rgba(90, 216, 230, 0.85) 2px, transparent 3.5px),
+        radial-gradient(circle at 76% 32%, rgba(255, 255, 255, 0.65) 0, rgba(255, 255, 255, 0.65) 1.2px, transparent 2.2px),
+        radial-gradient(circle at 22% 42%, rgba(247, 168, 216, 0.75) 0, rgba(247, 168, 216, 0.75) 1.8px, transparent 3px),
+        radial-gradient(circle at 88% 68%, rgba(255, 201, 77, 0.75) 0, rgba(255, 201, 77, 0.75) 1.8px, transparent 3px),
+        radial-gradient(circle at 12% 78%, rgba(255, 255, 255, 0.60) 0, rgba(255, 255, 255, 0.60) 1.5px, transparent 2.5px),
+        radial-gradient(circle at 64% 86%, rgba(90, 216, 230, 0.55) 0, rgba(90, 216, 230, 0.55) 1.5px, transparent 2.5px),
+        radial-gradient(ellipse at 50% 0%, rgba(90, 216, 230, 0.16) 0%, transparent 55%),
+        linear-gradient(160deg, var(--att-navy) 0%, var(--att-night) 52%, var(--att-indigo) 100%) !important;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+body.attendify-login-body #appCapsule {
+    padding: 24px 16px !important;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    background: transparent !important;
+}
+
+.attendify-login-shell {
+    position: relative;
+    z-index: 2;
+}
+
+.attendify-login-brand {
+    text-align: center;
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.attendify-login-logo {
+    height: 54px;
+    width: auto;
+    max-width: 230px;
+    display: inline-block;
+    filter: drop-shadow(0 6px 18px rgba(13, 20, 66, 0.45));
+}
+
+.attendify-sparkle-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+    color: var(--att-white);
+    opacity: 0.88;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.attendify-sparkle-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.attendify-sparkle-dot--cyan {
+    background-color: var(--att-cyan);
+    box-shadow: 0 0 8px var(--att-cyan);
+}
+
+.attendify-sparkle-dot--pink {
+    background-color: var(--att-pink);
+    box-shadow: 0 0 8px var(--att-pink);
+}
+
+.attendify-sparkle-dot--amber {
+    background-color: var(--att-amber);
+    box-shadow: 0 0 8px var(--att-amber);
+}
+
+.attendify-login-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: var(--att-radius-lg);
+    padding: 28px 24px 26px;
+    box-shadow: 0 18px 42px rgba(13, 20, 66, 0.38), 0 0 0 1px rgba(255, 255, 255, 0.55) inset;
+    border: 1px solid rgba(90, 216, 230, 0.32);
+}
+
+.attendify-login-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.attendify-login-header h1 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--att-navy);
+    letter-spacing: -0.02em;
+    margin: 0 0 6px 0;
+}
+
+.attendify-login-header h4 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--att-text-muted);
+    margin: 0;
+    line-height: 1.45;
+}
+
+.attendify-alert-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background-color: #FFF1F3 !important;
+    border: 1px solid #FECDD3 !important;
+    color: #BE123C !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(190, 18, 60, 0.08);
+}
+
+.attendify-alert-error ion-icon {
+    font-size: 1.25rem;
+    color: #E11D48;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.attendify-login-card .form-group.boxed {
+    margin-bottom: 14px;
+    padding: 0;
+}
+
+.attendify-login-card .form-label-text {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--att-night);
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+.attendify-login-card .form-control {
+    background-color: var(--att-white) !important;
+    border: 1.5px solid rgba(46, 58, 199, 0.18) !important;
+    border-radius: 14px !important;
+    height: 48px !important;
+    padding: 0 16px !important;
+    font-size: 0.95rem !important;
+    color: var(--att-navy) !important;
+    font-weight: 500;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.attendify-login-card .form-control::placeholder {
+    color: #8B93BD;
+}
+
+.attendify-login-card .form-control:focus {
+    border-color: var(--att-indigo) !important;
+    box-shadow: 0 0 0 3.5px rgba(90, 216, 230, 0.28) !important;
+    outline: none;
+}
+
+.attendify-login-card .form-button-group {
+    position: static !important;
+    background: transparent !important;
+    padding: 8px 0 0 !important;
+    min-height: auto !important;
+}
+
+.attendify-login-submit {
+    height: 48px !important;
+    border-radius: 14px !important;
+    font-size: 0.98rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.01em;
+}
+
+/* ==========================================================================
+   2. STUDENT LAYOUT — Topbar Branding, Light Surface (#F4F6FE) & Bottom Nav
+   ========================================================================== */
+
+body.attendify-student-body {
+    background-color: var(--att-bg-light) !important;
+    color: var(--att-text-main);
+}
+
+.attendify-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 990;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--att-border-soft);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 16px rgba(46, 58, 199, 0.06);
+}
+
+.attendify-topbar__brand {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.attendify-topbar__logo {
+    height: 34px;
+    width: auto;
+}
+
+.attendify-topbar__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.73rem;
+    font-weight: 600;
+    color: var(--att-indigo);
+    background-color: rgba(46, 58, 199, 0.08);
+    border: 1px solid rgba(46, 58, 199, 0.14);
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.attendify-topbar__pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--att-cyan);
+    box-shadow: 0 0 6px var(--att-cyan);
+}
+
+body.attendify-student-body #appCapsule {
+    padding-top: 8px;
+    padding-bottom: 88px;
+}
+
+/* Bottom Navigation Bar */
+.appBottomMenu.attendify-bottom-nav {
+    background: var(--att-white) !important;
+    border-top: 1px solid rgba(46, 58, 199, 0.10) !important;
+    box-shadow: 0 -6px 24px rgba(46, 58, 199, 0.10) !important;
+    min-height: 64px;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.appBottomMenu.attendify-bottom-nav .item {
+    position: relative;
+    color: var(--att-text-muted) !important;
+    transition: color 0.18s ease;
+}
+
+.appBottomMenu.attendify-bottom-nav .item ion-icon {
+    color: var(--att-text-muted) !important;
+    transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.appBottomMenu.attendify-bottom-nav .item strong {
+    color: var(--att-text-muted) !important;
+    font-weight: 600;
+    font-size: 0.72rem;
+    margin-top: 2px;
+}
+
+/* Active item in Royal Indigo (#2E3AC7) + thin Neon Cyan (#5AD8E6) indicator bar */
+.appBottomMenu.attendify-bottom-nav .item.active {
+    color: var(--att-indigo) !important;
+}
+
+.appBottomMenu.attendify-bottom-nav .item.active ion-icon,
+.appBottomMenu.attendify-bottom-nav .item.active strong {
+    color: var(--att-indigo) !important;
+    font-weight: 700;
+}
+
+.appBottomMenu.attendify-bottom-nav .item.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 28%;
+    right: 28%;
+    height: 3px;
+    background-color: var(--att-cyan) !important;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 8px rgba(90, 216, 230, 0.65);
+}
+
+/* Center Camera Action Button in Bottom Nav */
+.appBottomMenu.attendify-bottom-nav .action-button.large {
+    width: 54px !important;
+    height: 54px !important;
+    background: linear-gradient(135deg, var(--att-indigo) 0%, var(--att-night) 100%) !important;
+    border: 2.5px solid var(--att-cyan) !important;
+    box-shadow: 0 8px 20px rgba(46, 58, 199, 0.35), 0 0 12px rgba(90, 216, 230, 0.35) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.appBottomMenu.attendify-bottom-nav .action-button.large ion-icon {
+    color: var(--att-white) !important;
+    font-size: 1.55rem !important;
+}
+
+.appBottomMenu.attendify-bottom-nav .item:hover .action-button.large,
+.appBottomMenu.attendify-bottom-nav .item:active .action-button.large {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 24px rgba(46, 58, 199, 0.45), 0 0 0 4px rgba(90, 216, 230, 0.30) !important;
+}
+
+/* ==========================================================================
+   3. STUDENT DASHBOARD (dashboardhome.blade.php)
+   ========================================================================== */
+
+/* Night-Neon Hero Profile Banner (#user-section) */
+#user-section.attendify-hero-section {
+    background:
+        radial-gradient(circle at 86% 22%, rgba(90, 216, 230, 0.75) 0, rgba(90, 216, 230, 0.75) 2px, transparent 3.5px),
+        radial-gradient(circle at 72% 68%, rgba(255, 201, 77, 0.75) 0, rgba(255, 201, 77, 0.75) 1.8px, transparent 3px),
+        radial-gradient(circle at 24% 20%, rgba(247, 168, 216, 0.70) 0, rgba(247, 168, 216, 0.70) 1.8px, transparent 3px),
+        radial-gradient(circle at 92% 76%, rgba(255, 255, 255, 0.75) 0, rgba(255, 255, 255, 0.75) 1.5px, transparent 2.5px),
+        linear-gradient(135deg, var(--att-navy) 0%, var(--att-night) 52%, var(--att-indigo) 100%) !important;
+    border-radius: 0 0 28px 28px;
+    padding: 24px 20px 64px 20px !important;
+    margin-top: -8px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(13, 20, 66, 0.22);
+}
+
+#user-detail {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+#user-detail .avatar img.imaged {
+    border: 2.5px solid var(--att-cyan);
+    box-shadow: 0 4px 14px rgba(13, 20, 66, 0.45);
+    object-fit: cover;
+    border-radius: 18px !important;
+}
+
+#user-info #user-name {
+    color: var(--att-white) !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 4px 0 !important;
+    letter-spacing: -0.01em;
+}
+
+#user-info #user-role {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--att-white) !important;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(90, 216, 230, 0.45);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem !important;
+    font-weight: 600;
+}
+
+/* Primary Quick Action Card & Menu Section */
+#menu-section {
+    margin-top: -42px !important;
+    padding: 0 16px;
+    position: relative;
+    z-index: 5;
+}
+
+.attendify-card {
+    background-color: var(--att-white) !important;
+    border-radius: var(--att-radius) !important;
+    border: 1px solid var(--att-border-soft) !important;
+    box-shadow: var(--att-shadow) !important;
+}
+
+.attendify-cta-presensi {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, var(--att-indigo) 0%, var(--att-night) 100%);
+    color: var(--att-white) !important;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    text-decoration: none !important;
+    border: 1.5px solid rgba(90, 216, 230, 0.42);
+    box-shadow: 0 6px 18px rgba(46, 58, 199, 0.24);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.attendify-cta-presensi:hover,
+.attendify-cta-presensi:focus,
+.attendify-cta-presensi:active {
+    color: var(--att-white) !important;
+    border-color: var(--att-cyan);
+    box-shadow: 0 0 0 3px rgba(90, 216, 230, 0.35), 0 8px 22px rgba(46, 58, 199, 0.32);
+    transform: translateY(-1px);
+}
+
+.attendify-cta-presensi__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+}
+
+.attendify-cta-presensi__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.16);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    color: var(--att-cyan);
+}
+
+.attendify-cta-presensi__title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--att-white);
+}
+
+.attendify-cta-presensi__sub {
+    font-size: 0.74rem;
+    color: rgba(255, 255, 255, 0.82);
+    margin: 2px 0 0 0;
+}
+
+.attendify-cta-presensi__arrow {
+    font-size: 1.2rem;
+    color: var(--att-cyan);
+}
+
+/* Quick Menu Icons (Strictly No Green) */
+.list-menu {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.item-menu .menu-icon a {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.55rem !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.item-menu .menu-icon a:hover,
+.item-menu .menu-icon a:active {
+    transform: translateY(-2px);
+}
+
+.attendify-menu-indigo {
+    background-color: rgba(46, 58, 199, 0.10) !important;
+    color: var(--att-indigo) !important;
+}
+
+.attendify-menu-cyan {
+    background-color: rgba(90, 216, 230, 0.18) !important;
+    color: var(--att-night) !important;
+}
+
+.attendify-menu-amber {
+    background-color: rgba(255, 201, 77, 0.20) !important;
+    color: #9A6700 !important;
+}
+
+.attendify-menu-pink {
+    background-color: rgba(247, 168, 216, 0.22) !important;
+    color: #9D174D !important;
+}
+
+.item-menu .menu-name {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--att-text-main);
+    margin-top: 6px;
+}
+
+/* Presence Section */
+#presence-section {
+    padding: 0 16px;
+}
+
+/* Check-in & Check-out Photo Cards */
+.attendify-presence-card {
+    background: var(--att-white) !important;
+    border-radius: var(--att-radius) !important;
+    box-shadow: var(--att-shadow) !important;
+    border: 1px solid var(--att-border-soft) !important;
+    overflow: hidden;
+    height: 100%;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.attendify-presence-card--in {
+    border-top: 3px solid var(--att-indigo) !important;
+}
+
+.attendify-presence-card--out {
+    border-top: 3px solid var(--att-cyan) !important;
+}
+
+.attendify-presence-card .card-body {
+    padding: 14px !important;
+}
+
+.attendify-presence-card .presencecontent {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.attendify-presence-card .iconpresence {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background-color: var(--att-bg-light);
+    border: 1px solid rgba(46, 58, 199, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.attendify-presence-card .iconpresence img.imaged {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.attendify-presence-card--in .iconpresence ion-icon {
+    font-size: 1.5rem;
+    color: var(--att-indigo);
+}
+
+.attendify-presence-card--out .iconpresence ion-icon {
+    font-size: 1.5rem;
+    color: var(--att-night);
+}
+
+.attendify-presence-card .presencedetail {
+    text-align: left;
+    min-width: 0;
+}
+
+.attendify-presence-card .presencetitle {
+    font-size: 0.76rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--att-text-muted) !important;
+    margin: 0 0 4px 0 !important;
+}
+
+.attendify-presence-time {
+    display: inline-block;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--att-navy);
+    background-color: var(--att-bg-light);
+    padding: 3px 9px;
+    border-radius: 8px;
+}
+
+/* Friendly Empty-State Banner when $presensitoday == null */
+.attendify-empty-state {
+    background: linear-gradient(135deg, rgba(46, 58, 199, 0.06) 0%, rgba(90, 216, 230, 0.10) 100%);
+    border: 1px dashed rgba(46, 58, 199, 0.25);
+    border-radius: var(--att-radius);
+    padding: 14px 16px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.attendify-empty-state__svg {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+}
+
+.attendify-empty-state__text {
+    text-align: left;
+}
+
+.attendify-empty-state__title {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--att-navy);
+    margin: 0 0 2px 0;
+}
+
+.attendify-empty-state__desc {
+    font-size: 0.76rem;
+    color: var(--att-text-muted);
+    margin: 0;
+}
+
+/* Rekap & Status Cards (Hadir = Indigo, Terlambat = Amber, Alpha/Sakit = Pink, Izin = Cyan) */
+.rekappresensi {
+    margin-top: 18px;
+}
+
+.rekappresensi h3 {
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: var(--att-navy) !important;
+    margin-bottom: 12px !important;
+}
+
+.attendify-stat-card {
+    background: var(--att-white) !important;
+    border-radius: var(--att-radius) !important;
+    box-shadow: var(--att-shadow) !important;
+    border: 1px solid var(--att-border-soft) !important;
+    transition: transform 0.18s ease;
+}
+
+.attendify-stat-card .card-body {
+    padding: 12px 14px !important;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start !important;
+    gap: 10px;
+}
+
+.attendify-stat-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+/* Hadir = Indigo (#2E3AC7) */
+.attendify-stat-badge--hadir {
+    background-color: rgba(46, 58, 199, 0.12);
+    color: var(--att-indigo);
+}
+
+/* Izin = Cyan (#5AD8E6) */
+.attendify-stat-badge--izin {
+    background-color: rgba(90, 216, 230, 0.20);
+    color: var(--att-night);
+}
+
+/* Sakit / Alpha = Pink (#F7A8D8) */
+.attendify-stat-badge--pink {
+    background-color: rgba(247, 168, 216, 0.24);
+    color: #9D174D;
+}
+
+/* Terlambat = Amber (#FFC94D) */
+.attendify-stat-badge--terlambat {
+    background-color: rgba(255, 201, 77, 0.24);
+    color: #9A6700;
+}
+
+.attendify-stat-card .presensidetail h4 {
+    font-size: 0.76rem !important;
+    font-weight: 600 !important;
+    color: var(--att-text-muted) !important;
+    margin: 0 0 3px 0 !important;
+}
+
+.attendify-stat-card .presensidetail span {
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+    color: var(--att-navy) !important;
+}
+
+/* Tabs & History Listview */
+.presencetab .nav-tabs.style1 {
+    background: var(--att-white);
+    border-radius: 14px;
+    padding: 4px;
+    box-shadow: var(--att-shadow);
+    border: 1px solid var(--att-border-soft);
+}
+
+.presencetab .nav-tabs.style1 .nav-item .nav-link {
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.84rem;
+    color: var(--att-text-muted);
+    border: none !important;
+}
+
+.presencetab .nav-tabs.style1 .nav-item .nav-link.active {
+    background-color: var(--att-indigo) !important;
+    color: var(--att-white) !important;
+    box-shadow: 0 4px 12px rgba(46, 58, 199, 0.24);
+}
+
+.attendify-listview.listview.image-listview {
+    background: transparent !important;
+    border: none !important;
+}
+
+.attendify-listview.listview.image-listview > li {
+    background: var(--att-white);
+    border-radius: var(--att-radius);
+    box-shadow: var(--att-shadow);
+    border: 1px solid var(--att-border-soft) !important;
+    margin-bottom: 10px;
+    padding: 4px 0;
+}
+
+.attendify-listview.listview.image-listview > li::after {
+    display: none !important;
+}
+
+/* Status Light Badges (Strictly NO Green) */
+.attendify-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+}
+
+.attendify-badge--hadir,
+.badge-primary {
+    background-color: rgba(46, 58, 199, 0.12) !important;
+    color: var(--att-indigo) !important;
+    border: 1px solid rgba(46, 58, 199, 0.22);
+}
+
+.attendify-badge--terlambat,
+.badge-warning {
+    background-color: rgba(255, 201, 77, 0.24) !important;
+    color: #92400E !important;
+    border: 1px solid rgba(255, 201, 77, 0.55);
+}
+
+.attendify-badge--alpha,
+.badge-danger {
+    background-color: rgba(247, 168, 216, 0.28) !important;
+    color: #9D174D !important;
+    border: 1px solid rgba(247, 168, 216, 0.65);
+}
+
+.attendify-badge--izin,
+.badge-info {
+    background-color: rgba(90, 216, 230, 0.22) !important;
+    color: var(--att-night) !important;
+    border: 1px solid rgba(90, 216, 230, 0.55);
+}
+
+.attendify-badge--sakit,
+.badge-secondary {
+    background-color: rgba(30, 42, 120, 0.10) !important;
+    color: var(--att-night) !important;
+    border: 1px solid rgba(30, 42, 120, 0.20);
+}

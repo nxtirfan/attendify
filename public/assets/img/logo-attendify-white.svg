@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" width="240" height="56" fill="none" role="img" aria-label="Attendify">
+  <defs>
+    <linearGradient id="pinGlowWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E2E8FF" />
+    </linearGradient>
+  </defs>
+  <!-- Outer soft night-neon badge frame -->
+  <rect x="2" y="4" width="48" height="48" rx="14" fill="#FFFFFF" fill-opacity="0.14" stroke="#5AD8E6" stroke-width="1.5" stroke-opacity="0.75" />
+  <!-- Location Pin Icon -->
+  <path d="M26 12C19.925 12 15 16.925 15 23C15 30.8 26 42 26 42C26 42 37 30.8 37 23C37 16.925 32.075 12 26 12ZM26 27.2C23.68 27.2 21.8 25.32 21.8 23C21.8 20.68 23.68 18.8 26 18.8C28.32 18.8 30.2 20.68 30.2 23C30.2 25.32 28.32 27.2 26 27.2Z" fill="url(#pinGlowWhite)" />
+  <!-- Neon Cyan Center Pulse Dot -->
+  <circle cx="26" cy="23" r="2.5" fill="#5AD8E6" />
+  <!-- Yurameku 4-point Star Sparkles -->
+  <path d="M41 11L42.1 13.9L45 15L42.1 16.1L41 19L39.9 16.1L37 15L39.9 13.9L41 11Z" fill="#FFC94D" />
+  <path d="M12 35L12.7 36.8L14.5 37.5L12.7 38.2L12 40L11.3 38.2L9.5 37.5L11.3 36.8L12 35Z" fill="#F7A8D8" />
+  <!-- Brand Wordmark -->
+  <text x="62" y="34" fill="#FFFFFF" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="26" font-weight="800" letter-spacing="-0.5">Attendify</text>
+  <!-- Subtle Neon Cyan Underline Wave -->
+  <path d="M63 42C88 39.5 118 44.5 148 41.5" stroke="#5AD8E6" stroke-width="2" stroke-linecap="round" stroke-opacity="0.85" />
+  <circle cx="156" cy="41.5" r="2" fill="#F7A8D8" />
+</svg>
