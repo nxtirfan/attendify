@@ -5,7 +5,7 @@
 - Revision sumber yang diaudit: `2c67a722fa044bc67c27c91434abfcf19447648a`.
 - Status: audit statis dan usulan perencanaan, bukan hasil deployment.
 - Produk: Attendify: Sistem Presensi Berbasis GPS dan Selfie. Nama lama GeoHadir dan alternatif TitikHadir/Tapak/SiniHadir/Hadiria tidak digunakan lagi.
-- Attendify merupakan pengembangan aplikasi semester sebelumnya (`nxtirfan/presensi-gps-selfie-lama`, arsip), bukan aplikasi baru dari nol. Fokus lingkungan pendidikan.
+- Attendify merupakan kelanjutan pengembangan PresensiGPS (`nxtirfan/presensi-gps-selfie`, repo sudah diarsipkan). Fokus lingkungan pendidikan.
 - Platform final kelompok: AWS. Keputusan ini diambil setelah evaluasi platform pada 12 November 2026. Jika pengumpulan Progress 1 telah dilakukan dengan platform lain, perubahan platform wajib dikonfirmasi ke dosen sebelum implementasi.
 - Penyimpanan dokumen ini tidak berarti persetujuan untuk memperbaiki source code, mengubah database, mengubah branding, atau melakukan deployment.
 

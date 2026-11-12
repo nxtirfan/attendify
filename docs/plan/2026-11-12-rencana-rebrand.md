@@ -3,7 +3,7 @@
 - Tanggal: 12 November 2026.
 - Status rencana: disetujui, eksekusi berjalan.
 - Repo aktif: `nxtirfan/attendify`. Checkout lokal: `D:\Dev\attendify`.
-- Repo arsip semester kemarin: `nxtirfan/presensi-gps-selfie-lama` (beku, tidak dikembangkan lagi).
+- PresensiGPS (`nxtirfan/presensi-gps-selfie`) sudah diarsipkan/deprecated: tidak dikembangkan lagi, dengan README yang mengarahkan kelanjutan ke Attendify.
 
 ## Keputusan yang sudah final
 

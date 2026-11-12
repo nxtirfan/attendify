@@ -2,7 +2,7 @@
 
 Attendify: Sistem Presensi Berbasis GPS dan Selfie. Aplikasi web Laravel untuk lingkungan pendidikan dengan peran Administrator, Guru, dan Siswa.
 
-Attendify merupakan pengembangan aplikasi presensi semester sebelumnya, bukan aplikasi baru dari nol.
+Attendify merupakan kelanjutan pengembangan dari [PresensiGPS](https://github.com/nxtirfan/presensi-gps-selfie), sistem presensi berbasis GPS dan foto selfie.
 
 ## Fitur
 
@@ -43,7 +43,7 @@ Catatan: `php artisan migrate` saja belum membangun seluruh schema aplikasi; mig
 
 - `docs/audit/2026-11-12-audit-dan-rencana-aws.md`: audit repository dan rencana deployment AWS.
 - `docs/plan/2026-11-12-rencana-rebrand.md`: rencana rebranding dan alur kerja.
-- `docs/`: laporan lama, ERD, dan screenshot historis dari aplikasi semester sebelumnya.
+- `docs/`: laporan lama, ERD, dan screenshot historis dari PresensiGPS.
 
 ## Tim
 
