@@ -131,33 +131,29 @@ class SiswaController extends Controller
         $password = bcrypt($nis); // Atau password default lain
         $role = 'Siswa';
 
-        // 2. Insert ke tabel user
-        $user_id = DB::table('user')->insertGetId([
-            'username' => $username,
-            'password' => $password,
-            'role' => $role,
-            // 'nama_lengkap' => null, // hanya untuk admin
-        ]);
-
-        // 3. Proses upload foto
-        if ($request->hasFile('foto')) {
-            $foto = $nis . "." . $request->file('foto')->getClientOriginalExtension();
-        } else {
-            $foto = null;
-        }
-
-        // 4. Insert ke tabel siswa
+        // 2. Insert ke tabel user dan siswa dalam satu transaksi
         $data = [
-            'user_id' => $user_id,
+            'user_id' => null,
             'nis' => $nis,
             'nama_lengkap' => $nama_lengkap,
             'kelas' => $kelas,
             'no_hp' => $no_hp,
             'angkatan_id' => $angkatan_id,
-            'foto' => $foto,
+            'foto' => $request->hasFile('foto') ? $nis . "." . $request->file('foto')->getClientOriginalExtension() : null,
         ];
 
-        $simpan = DB::table('siswa')->insert($data);
+        try {
+            $simpan = DB::transaction(function () use ($username, $password, $role, &$data) {
+                $data['user_id'] = DB::table('user')->insertGetId([
+                    'username' => $username,
+                    'password' => $password,
+                    'role' => $role,
+                ]);
+                return DB::table('siswa')->insert($data);
+            });
+        } catch (\Illuminate\Database\QueryException $e) {
+            return Redirect::back()->with('warning', 'Data Gagal Disimpan');
+        }
 
         if ($simpan) {
             if ($request->hasFile('foto')) {
@@ -216,11 +212,20 @@ class SiswaController extends Controller
     }
 
     public function delete($nis) {
-        $delete = DB::table('siswa')->where('nis', $nis)->delete();
-        if ($delete) {
-            return Redirect::back()->with('success', 'Data Berhasil Dihapus');
-        } else {
+        $siswa = DB::table('siswa')->where('nis', $nis)->first();
+        if (!$siswa) {
             return Redirect::back()->with('warning', 'Data Gagal Dihapus');
         }
+
+        DB::transaction(function () use ($siswa) {
+            DB::table('siswa')->where('siswa_id', $siswa->siswa_id)->delete();
+            DB::table('user')->where('user_id', $siswa->user_id)->delete();
+        });
+
+        if ($siswa->foto) {
+            Storage::delete('public/uploads/siswa/' . $siswa->foto);
+        }
+
+        return Redirect::back()->with('success', 'Data Berhasil Dihapus');
     }
 }

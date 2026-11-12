@@ -15,7 +15,9 @@ class Siswa extends Model
         'nis',
         'nama_lengkap',
         'kelas',
+        'angkatan_id',
         'no_hp',
+        'foto',
         'alamat',
         'tanggal_lahir',
     ];
@@ -24,6 +26,12 @@ class Siswa extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'user_id');
+    }
+
+    // Relasi ke Angkatan
+    public function angkatan()
+    {
+        return $this->belongsTo(Angkatan::class, 'angkatan_id', 'angkatan_id');
     }
 
     // Relasi ke Presensi

@@ -12,23 +12,18 @@ class Presensi extends Model
 
     protected $fillable = [
         'siswa_id',
-        'jadwal_id',
         'tgl_presensi',
         'jam_in',
         'jam_out',
         'foto_in',
         'foto_out',
-        'lokasi',
+        'lokasi_in',
+        'lokasi_out',
         'status',
     ];
 
     public function siswa()
     {
         return $this->belongsTo(Siswa::class, 'siswa_id', 'siswa_id');
-    }
-
-    public function jadwal()
-    {
-        return $this->belongsTo(Jadwal::class, 'jadwal_id', 'jadwal_id');
     }
 }
