@@ -1,11 +1,13 @@
 # Audit Repository dan Rencana Proyek Komputasi Awan
 
-- Tanggal audit: 11 November 2026.
-- Repository: `nxtirfan/presensi-gps-selfie`.
+- Audit awal: 11 November 2026. Revisi dokumen: 12 November 2026.
+- Repository aktif: `nxtirfan/attendify`.
 - Revision sumber yang diaudit: `2c67a722fa044bc67c27c91434abfcf19447648a`.
 - Status: audit statis dan usulan perencanaan, bukan hasil deployment.
-- GeoHadir adalah nama usulan; TitikHadir, Tapak, SiniHadir, dan Hadiria merupakan alternatif diskusi, belum keputusan branding.
-- Penyimpanan dokumen ini tidak berarti persetujuan untuk memperbaiki source code, mengubah database, mengganti branding, atau melakukan deployment.
+- Produk: Attendify: Sistem Presensi Berbasis GPS dan Selfie. Nama lama GeoHadir dan alternatif TitikHadir/Tapak/SiniHadir/Hadiria tidak digunakan lagi.
+- Attendify merupakan pengembangan aplikasi semester sebelumnya (`nxtirfan/presensi-gps-selfie-lama`, arsip), bukan aplikasi baru dari nol. Fokus lingkungan pendidikan.
+- Platform final kelompok: AWS. Keputusan ini diambil setelah evaluasi platform pada 12 November 2026. Jika pengumpulan Progress 1 telah dilakukan dengan platform lain, perubahan platform wajib dikonfirmasi ke dosen sebelum implementasi.
+- Penyimpanan dokumen ini tidak berarti persetujuan untuk memperbaiki source code, mengubah database, mengubah branding, atau melakukan deployment.
 
 ## 1. Executive Summary
 
@@ -20,7 +22,7 @@ Yang dijalankan pada audit awal:
 - `composer validate`: manifest valid.
 - Pemeriksaan Git sebelum dan setelah audit: worktree bersih.
 
-Yang belum dijalankan: aplikasi/browser, login/CRUD/GPS/kamera end-to-end, import database, migrations, PHPUnit, deployment, dan pemeriksaan subscription Azure. Folder `vendor/` dan `.env` tidak tersedia saat audit. Tidak ada dependency yang dipasang atau source yang diubah pada audit awal.
+Yang belum dijalankan: aplikasi/browser, login/CRUD/GPS/kamera end-to-end, import database, migrations, PHPUnit, deployment, pemeriksaan benefit/saldo/kuota AWS, dan pemeriksaan regional availability. Folder `vendor/` dan `.env` tidak tersedia saat audit. Tidak ada dependency yang dipasang atau source yang diubah pada audit awal.
 
 Istilah **terimplementasi di kode** tidak berarti **sudah terbukti berfungsi saat runtime**. Screenshot dan laporan lama bukan bukti runtime revision sekarang.
 
@@ -52,7 +54,7 @@ Struktur penting:
 - `storage/`: log, session, cache, upload lokal.
 - `public/`: entry point dan aset.
 - `tests/`: tests contoh.
-- `docs/`: laporan lama, ERD, screenshot historis.
+- `docs/`: laporan lama, ERD, screenshot historis, audit.
 
 Ada `public/.htaccess` untuk Apache. Konfigurasi Nginx/provisioning server siap deploy belum ditemukan pada pemeriksaan. Blade yang diperiksa menggunakan aset publik/CDN; pencarian tidak menemukan `@vite`, sehingga Vite tidak otomatis menjadi jalur build seluruh UI.
 
@@ -174,11 +176,11 @@ HTTPS melindungi transport, bukan membuktikan lokasi fisik atau keaslian wajah. 
 
 Linux layak secara teknologi, belum dibuktikan runtime. Kebutuhan: Nginx, PHP-FPM, extension PHP sesuai lockfile (termasuk PDO MySQL, mbstring, XML, cURL, fileinfo), Composer, MySQL, cron scheduler, TLS, serta permission storage/bootstrap cache. Node hanya diperlukan jika pipeline aset memakainya.
 
-Rencana produksi: APP_ENV production, APP_DEBUG false, APP_URL HTTPS, APP_KEY khusus environment, secure session cookie, user database non-root, document root public, dan larangan akses .env/source/dump/internal directory. `config/database.php:62` memiliki opsi CA MySQL, tetapi koneksi TLS Azure belum diuji.
+Rencana produksi: APP_ENV production, APP_DEBUG false, APP_URL HTTPS, APP_KEY khusus environment, secure session cookie, user database non-root, document root public, dan larangan akses .env/source/dump/internal directory. `config/database.php:62` memiliki opsi CA MySQL, tetapi koneksi TLS ke RDS belum diuji.
 
-Storage lokal cocok terbatas pada satu persistent VM; tidak otomatis cocok multi-instance. Azure disk/adapter belum didefinisikan dalam config/dependencies. Integrasi Blob butuh pemilihan adapter, validasi, penyesuaian path/URL, dan uji. Adapter komunitas yang diperiksa mendukung Laravel 10 tetapi versi saat audit memerlukan PHP ^8.2.
+Storage lokal cocok terbatas pada satu persistent instance; tidak otomatis cocok multi-instance. Repository memuat definisi disk `s3` pada `config/filesystems.php`, tetapi package driver S3 (`league/flysystem-aws-s3-v3`) belum tercantum pada `composer.json`, jadi integrasinya belum aktif. Mengganti `FILESYSTEM_DISK` saja tidak cukup: perlu driver, IAM role/izin, perbaikan alur penulisan dan pembacaan foto, serta uji temporary URL/endpoint berotorisasi.
 
-Logging Laravel sudah ada: default stack/single dan channel daily retensi 14 hari (`config/logging.php:54–72`), serta exception handler standar. Belum ada bukti log audit terstruktur, integrasi Monitor, alert, atau penanganan konsisten jika database sukses tetapi foto gagal disimpan.
+Logging Laravel sudah ada: default stack/single dan channel daily retensi 14 hari (`config/logging.php:54–72`), serta exception handler standar. Belum ada bukti log audit terstruktur, integrasi CloudWatch, alert, atau penanganan konsisten jika database sukses tetapi foto gagal disimpan. Log Laravel tidak otomatis mengalir ke CloudWatch; perlu CloudWatch Agent atau pipeline terpisah.
 
 Tests masih contoh. Feature test mengharapkan root 200, sedangkan route tamu mengarah login (`tests/Feature/ExampleTest.php:13–18`). Ini indikasi ekspektasi test perlu disesuaikan, bukan hasil PHPUnit gagal: tests belum dijalankan.
 
@@ -186,82 +188,73 @@ Tests masih contoh. Feature test mengharapkan root 200, sedangkan route tamu men
 
 Sebelum publik: migration/seed reproducible, sinkronisasi model/schema, perbaikan SQL dan validasi, upload aman, password/throttle/logout, route/redirect, duplikasi presensi, aturan izin/alpha, konfigurasi produksi, serta tests domain.
 
-Bukti cloud yang harus dihasilkan: minimal tiga layanan benar-benar dipakai, HTTPS, NSG/firewall, backup snapshot dan uji restore, application/server log, monitoring, konfigurasi skalabilitas, laporan, video data dummy, dan AI Disclosure.
+Bukti cloud yang harus dihasilkan: minimal tiga layanan benar-benar dipakai, HTTPS, security group/firewall, backup snapshot dan uji restore, application/server log, monitoring, konfigurasi skalabilitas, laporan, video data dummy, dan AI Disclosure.
 
-## 8. Rekomendasi arsitektur Microsoft Azure
+## 8. Rancangan arsitektur AWS
 
-### Alternatif A
+Kombinasi terpilih (dasar rencana):
 
-Azure VM (Nginx + PHP-FPM + Laravel + MySQL lokal) + Blob Storage + Azure Monitor.
+Browser
+   │ HTTPS
+   ▼
+EC2 Linux: Nginx → PHP-FPM → Laravel
+   ├── RDS MySQL privat
+   ├── S3 bucket privat (foto selfie)
+   └── CloudWatch Logs/Metrics
 
-Browser → HTTPS/Nginx → Laravel → MySQL localhost. Laravel menulis foto ke Blob privat dan mengirim log terpilih ke Monitor/Log Analytics. Tiga layanan harus benar-benar dikonfigurasi, bukan hanya disebut.
-
-Kelebihan: jumlah komponen lebih sedikit, biaya dasar relatif rendah. Kekurangan: aplikasi/DB berbagi VM, maintenance dan konsistensi snapshot ditanggung tim, scale-out lebih sulit.
-
-### Alternatif B — rekomendasi utama bersyarat
-
-Azure VM (Nginx + PHP-FPM + Laravel) + Azure Database for MySQL Flexible Server + Blob Storage + Azure Monitor.
-
-Browser → HTTPS/Nginx → Laravel → MySQL terkelola melalui koneksi dibatasi/TLS. Foto disimpan pada Blob privat. B dipilih jika layanan/quota/kredit tersedia; A menjadi fallback, bukan janji semua benefit pasti aktif.
-
-| Aspek | A | B |
-| --- | --- | --- |
-| Biaya dasar | Lebih rendah pada contoh sizing | Sedikit lebih tinggi |
-| Konfigurasi | Awal sederhana; backup lebih manual | Koneksi/TLS/network lebih banyak |
-| Keamanan | Isolasi app–DB lebih rendah | Pemisahan komponen lebih baik |
-| Maintenance | OS dan DB ditangani tim | OS DB dan backup dasar dikelola layanan |
-| Skalabilitas | Vertical scaling realistis | Scale-out aplikasi lebih mudah |
-| Snapshot | Disk snapshot perlu koordinasi DB | Backup snapshot otomatis layanan |
-| Rubrik | Tiga layanan bila diterima dosen | Compute/database/storage lebih eksplisit |
+- EC2 pada public subnet dengan satu public IP; SSH dibatasi IP tim.
+- RDS tidak publicly accessible; DB subnet group sesuai, instance Single-AZ untuk demo.
+- Security Group RDS menerima MySQL hanya dari Security Group aplikasi.
+- EC2 memakai IAM role untuk akses S3, bukan access key permanen dalam repository.
+- Bucket memblokir akses publik; foto ditampilkan lewat endpoint berotorisasi atau temporary URL.
+- HTTPS ditangani Nginx dengan domain/subdomain dan sertifikat tervalidasi; redirect HTTP ke HTTPS; PHP-FPM tidak publik.
+- Tidak membutuhkan NAT Gateway untuk rancangan dasar ini.
+- Tiga kategori layanan yang dipakai nyata: compute (EC2), database (RDS), object storage (S3). CloudWatch menjadi kategori tambahan untuk logging/monitoring. Security Group tidak dihitung sebagai layanan ketiga.
 
 ### Alur foto dan autentikasi
 
-Pertahankan session auth Laravel. Browser mengirim selfie via HTTPS; Laravel memvalidasi user/lokasi/gambar, menyimpan objek privat, lalu mencatat object key di DB. Foto ditampilkan lewat endpoint berotorisasi atau temporary URL jika adapter mendukung. Jangan simpan source aplikasi sebagai objek publik.
-
-### HTTPS, NSG, firewall
-
-Gunakan domain/subdomain dan sertifikat tervalidasi. Nginx terminasi TLS, redirect HTTP ke HTTPS. SSH dibatasi IP tim. PHP-FPM tidak publik. MySQL A bind lokal; B memakai private connectivity jika realistis atau firewall ketat untuk sumber aplikasi jika endpoint publik diperlukan. Jangan membuka DB ke internet secara luas.
+Pertahankan session auth Laravel. Browser mengirim selfie via HTTPS; Laravel memvalidasi user/lokasi/gambar, menyimpan objek privat ke S3, lalu mencatat object key di DB. Foto ditampilkan lewat route berotorisasi atau temporary URL S3. Jangan buat bucket publik dan jangan simpan source aplikasi sebagai objek.
 
 ### Backup dan pemulihan
 
-A: tempatkan data MySQL pada disk jelas, stop/quiesce DB sebelum snapshot demo agar konsisten, tambahkan logical backup terenkripsi, dan uji restore pada resource terpisah. Snapshot sembarang saat DB aktif tidak otomatis application-consistent.
+RDS automated backup dan manual snapshot untuk bukti. Tentukan retensi awal (misal tujuh hari), restore ke instance terpisah, lalu verifikasi data. Backup database tidak mencakup foto di S3; tetapkan retensi/proteksi foto terpisah. Uji restore wajib didokumentasikan sebagai bukti tugas.
 
-B: backup otomatis snapshot+transaction log, retensi awal tujuh hari, restore ke server baru dan verifikasi data. Backup DB tidak mencakup Blob; tentukan proteksi/retensi foto terpisah.
+### Logging dan monitoring
 
-### Logging/monitoring
-
-Pantau CPU, disk, memori melalui agent bila dibutuhkan, serta koneksi/error DB. Kumpulkan log Laravel/Nginx/PHP-FPM secara terpilih dan lakukan rotasi. Jangan log password/base64 selfie atau lokasi lengkap tanpa kebutuhan. Demonstrasikan penelusuran satu kejadian. Platform metrics dan Log Analytics memiliki model biaya berbeda.
+Kumpulkan log Laravel (daily), Nginx error/access, dan metrik resource (CloudWatch Agent). Batasi retensi dan hindari password/base64 selfie dalam log. Demonstrasikan penelusuran satu kejadian end-to-end. CloudWatch ingestion memiliki tarif per GB; batasi volume agar estimasi biaya tidak meleset.
 
 ### Skalabilitas dan Load Balancer
 
-Jika dosen menerima vertical scaling, demonstrasikan perubahan ukuran VM; jangan menyebutnya autoscaling/load balancing. Jika LB wajib, gunakan Standard LB dan dua backend untuk bukti distribusi/failover. LB Layer 4, TLS tetap pada Nginx. Gunakan database bersama (B), Blob bersama, session/cache yang sesuai multi-instance, health probe, dan scheduler tunggal. Satu VM di belakang LB bukan bukti distribusi antarserver. Autoscaling VM Scale Set memerlukan konfigurasi/uji tersendiri, bukan otomatis tersedia karena ada LB.
+Awali satu aplikasi + satu managed DB. Vertical scaling (mengubah ukuran EC2/RDS) berbeda dari autoscaling/load balancing; jangan menyamakan keduanya dalam laporan. Jika dosen mewajibkan Load Balancer: gunakan dua backend EC2 untuk bukti distribusi/failover, database dan S3 bersama, session/cache yang sesuai multi-instance, health probe, TLS tetap pada Nginx, dan scheduler tunggal agar alpha tidak digandakan. Biaya dan konfigurasi LB belum termasuk estimasi dasar.
 
-## 9. Estimasi biaya dan risiko
+## 9. Estimasi biaya AWS
 
-Angka berikut adalah snapshot perencanaan saat audit, bukan penawaran harga, jaminan quota, atau billing aktual. Dasar: Azure Retail Prices API, region southeastasia, USD, konsumsi retail Linux, 730 jam/bulan dan 504 jam/21 hari, tanpa diskon/free allowance mahasiswa.
+Angka berikut adalah snapshot perencanaan 11 November 2026, bukan penawaran harga, jaminan quota, atau billing aktual. Sumber: AWS Price List resmi region ap-southeast-1 (Singapura), retail, tanpa diskon/free allowance.
 
-| Komponen | Harga retail yang diperoleh saat audit |
+| Komponen | Tarif yang diperoleh saat audit |
 | --- | ---: |
-| Linux VM B1ms | US$0,0264/jam |
-| Linux VM B2s | US$0,0528/jam |
-| MySQL Flexible Server B1MS compute | US$0,026/jam |
-| MySQL Flexible Server storage | US$0,138/GB-bulan |
-| Standard HDD managed disk S4 | US$1,536/bulan |
-| Standard public IPv4 | US$0,005/jam |
-| Blob Hot LRS, tier awal penyimpanan | US$0,02/GB-bulan |
-| Standard LB, kelompok rule awal | US$0,025/jam + pemrosesan data |
+| EC2 t3.small | US$0,0264/jam |
+| RDS MySQL db.t3.micro, Single-AZ | US$0,026/jam |
+| RDS storage GP3 20 GB | US$0,138/GB-bulan |
+| EBS GP3 30 GB (disk aplikasi) | US$0,096/GB-bulan |
+| Public IPv4 | US$0,005/jam |
+| S3 Standard 1 GB | US$0,025/GB-bulan |
 
-Sumber query: `https://prices.azure.com/api/retail/prices`, filter priceType Consumption dan armRegionName southeastasia. Meter Standard LB didapat pada armRegionName Global. VM Linux mengecualikan Windows/Spot/Low Priority. Harga aktual subscription dan SKU availability wajib dicek ulang di portal/calculator sebelum provisioning.
+Asumsi: infrastruktur aktif 504 jam (21 hari), tambahan 72 jam demonstrasi, prorata storage 730 jam/bulan, foto 1 GB.
 
-- A: B2s untuk app+DB, satu disk S4, satu public IP, 1 GB Blob: sekitar US$30/21 hari atau US$44/730 jam.
-- B: B1ms app, MySQL B1MS dengan storage 32 GB, satu disk S4, satu public IP, 1 GB Blob: sekitar US$33/21 hari atau US$48/730 jam.
-- B dengan LB dan VM app kedua selama 21 hari: tambahan dasar sekitar US$27, sebelum trafik/komponen lain. Batasi durasi resource demo.
+| Durasi | Estimasi |
+| --- | ---: |
+| Pengerjaan 21 hari | US$32,84 |
+| Tambahan demonstrasi 3 hari | US$4,69 |
+| Total 24 hari | US$37,53 |
 
-Subtotal belum mencakup snapshot/backup tambahan, transaksi storage, egress, Log Analytics, restore server sementara, domain, pajak, atau konfigurasi tambahan. Disk HDD hanya asumsi sizing untuk estimasi, bukan jaminan performa. Uji beban demo menentukan kebutuhan sebenarnya.
+Estimasi belum mencakup: request object storage, transfer data berbayar, CloudWatch ingestion di luar allowance (referensi tarif Standard ingestion Singapura saat audit: US$0,70/GB), alarm/metrik tambahan, snapshot/backup berlebih, server sementara hasil restore, CPU credit surplus pada instance burstable, domain, dan pajak. Untuk demo kecil, batasi log, retensi, dan trafik; jadikan US$50 batas anggaran internal awal, bukan jaminan tagihan.
 
-Azure for Students menyebut kredit US$100 untuk 12 bulan bagi mahasiswa eligible tanpa kartu kredit. Saldo, quota, benefit, dan akses layanan tim belum diperiksa. Harga konsumsi di atas merupakan dasar estimasi pengurangan kredit, bukan instruksi beralih ke Pay-As-You-Go. Jangan menganggap managed database otomatis gratis.
+Program Free Tier saat audit: akun baru mendapat US$100 awal, dapat memperoleh hingga US$100 tambahan melalui aktivitas eligible (tidak otomatis), dan Free Plan berlaku hingga enam bulan atau kredit habis. Jangan gunakan asumsi program lama EC2/RDS gratis 12 bulan untuk akun baru. Tanggal kedaluwarsa dan saldo aktual wajib dicek di Billing Console; saldo tidak membuktikan semua SKU tersedia.
 
-Gunakan resource group/tag, budget alerts, dan hapus resource sementara. Budget alert tidak menghentikan resource. Deallocated menghentikan biaya compute VM, tetapi disk/networking dapat tetap berbiaya. Mematikan OS saja tidak sama dengan deallocate.
+Yang sebaiknya tidak ditambahkan dulu: NAT Gateway tanpa kebutuhan jelas, Load Balancer ke satu server, HA database untuk demo kecil, bastion berbayar, layanan analytics/AI yang tidak dipakai.
+
+Gunakan tag/budget alert dan hapus resource sementara. Budget alert tidak menghentikan resource; instance yang di-stop tidak selalu menghentikan seluruh biaya (EBS dan IPv4 tetap ditagih bila disiapkan).
 
 ## 10. Roadmap tiga minggu
 
@@ -269,99 +262,98 @@ Semua pekerjaan implementasi berikut menunggu persetujuan.
 
 ### Minggu 1 — database reproducible dan aplikasi siap staging
 
-- Irfan: cek saldo/benefit/quota/region dan estimasi; rancang Nginx/PHP-FPM, NSG, DNS/TLS; putuskan A/B/LB bersama kelompok.
-- Riski: amankan whereRaw pada Presensi/GuruController; validasi auth/profil/upload/presensi; perbaiki routes/web.php dan check-out berulang; evaluasi dependency yang didukung.
-- Isa: migration canonical dari presensigps.sql, seed dummy, sinkronisasi app/Models, constraint dan transaksi user/siswa.
-- Febriana: perbaiki old_foto dan form siswa; tangani GPS/kamera gagal pada presensi/create.blade.php; matriks fitur dan draft laporan.
+- Irfan: cek benefit/saldo/kuota/region AWS dan estimasi; rancang Nginx/PHP-FPM, Security Group, DNS/TLS; konfirmasi keputusan LB ke dosen.
+- Isa: amankan whereRaw pada Presensi/GuruController; validasi auth/profil/upload/presensi; perbaiki routes/web.php dan check-out berulang.
+- Febriana: migration canonical dari presensigps.sql, seed dummy, sinkronisasi app/Models, constraint dan transaksi user/siswa.
+- Riski: perbaiki old_foto dan form siswa; tangani GPS/kamera gagal pada presensi/create.blade.php; matriks fitur dan draft laporan.
 - Bukti target: bootstrap DB kosong, login tiga role, CRUD siswa/angkatan dan presensi dasar teruji dengan data dummy.
 
-### Minggu 2 — staging cloud
+### Minggu 2 — staging cloud AWS
 
-- Irfan: provision resource yang disepakati; deploy document root public; HTTPS/NSG/cron/rotasi log.
-- Riski: integrasi disk Blob dan akses foto berotorisasi; konsistensi izin/alpha; penanganan kegagalan file.
-- Isa: integrasi DB/TLS, backup snapshot dan restore, pengujian relasi/transaksi/duplikasi.
-- Febriana: uji perangkat nyata via HTTPS, histori/monitoring/laporan/foto; screenshot baru dan dokumentasi konfigurasi.
-- Bukti target: URL HTTPS publik, file persisten, DB aktif, snapshot dan restore berhasil.
+- Irfan: provision EC2/RDS/S3; deploy document root public; HTTPS/security group/cron/rotasi log; IAM role untuk S3.
+- Isa: integrasi disk S3 (driver, alur foto, akses berotorisasi/temporary URL); konsistensi izin/alpha; penanganan kegagalan file.
+- Febriana: integrasi DB/TLS, backup snapshot dan restore, pengujian relasi/transaksi/duplikasi.
+- Riski: uji perangkat nyata via HTTPS, histori/monitoring/laporan/foto; screenshot baru dan dokumentasi konfigurasi.
+- Bukti target: URL HTTPS publik, foto persisten di S3 privat, DB aktif, snapshot dan restore berhasil.
 
 ### Minggu 3 — operasional dan bukti akhir
 
-- Irfan: Monitor/alert; vertical scaling atau LB dua backend sesuai rubrik; tinjau biaya/hapus resource sementara.
-- Riski: tests role, input/upload invalid, request berulang, query laporan; perbaiki hasil uji tanpa memperluas scope.
-- Isa: rekonsiliasi izin/alpha, verifikasi restore, finalisasi ERD/data dictionary.
-- Febriana: laporan, bukti monitoring, video, dan koordinasi AI Disclosure.
+- Irfan: CloudWatch agent/alert; vertical scaling atau LB dua backend sesuai rubrik; tinjau biaya/hapus resource sementara.
+- Isa: tests role, input/upload invalid, request berulang, query laporan; perbaiki hasil uji tanpa memperluas scope.
+- Febriana: rekonsiliasi izin/alpha, verifikasi restore, finalisasi ERD/data dictionary.
+- Riski: laporan, bukti monitoring, video, dan koordinasi AI Disclosure.
 - Bukti target: setiap syarat dosen memiliki konfigurasi dan hasil demonstrasi aktual.
 
 ## 11. Pembagian tugas anggota
 
-Kelas SSD 2024. Nama kelompok belum ditentukan.
+Nama kelompok: Kelompok 9. Kelas: SSD-24.
 
-| Anggota | NIM | Peran awal / hasil utama |
+| Anggota | NIM | Peran / hasil utama |
 | --- | --- | --- |
-| M Irfan Al Hakim | 2404220023 | Ketua, Cloud/DevOps: arsitektur, Azure, HTTPS/NSG, monitoring, scaling, biaya |
-| Riski Cahya Alfiansyah | 2404220019 | Backend: validasi/auth/presensi/laporan, Blob, tests |
-| Isa Fitri Ulul Firdaus | 2404220033 | Database: migration/model/constraint/seed, backup/restore, ERD |
-| Febriana Dwi Rahayu | 2404220042 | Frontend/Dokumentasi: GPS/kamera/form, UI testing, laporan/video |
+| M Irfan Al Hakim | 2404220023 | Ketua, Cloud/DevOps: arsitektur AWS, EC2/RDS/S3, security group, monitoring, scaling, biaya |
+| Isa Fitri Ulul Firdaus | 2404220033 | Backend: validasi/auth/presensi/laporan, integrasi S3, tests |
+| Febriana Dwi Rahayu | 2404220042 | Database: migration/model/constraint/seed, backup/restore, ERD |
+| Riski Cahya Alfiansyah | 2404220019 | Frontend & Dokumentasi: GPS/kamera/form, UI testing, laporan/video |
 
-Riski–Isa menyepakati schema lebih dahulu. Integrasi Blob menunggu keputusan kompatibilitas PHP/adapter. Bukti video harus berasal dari deployment yang diuji. Pembagian awal dapat disesuaikan.
+Pembagian ini pembagian terbaru dan menggantikan pembagian pada dokumen audit lama. Integrasi S3 menunggu penambahan driver dan uji. Bukti video harus berasal dari deployment yang diuji.
 
 ## 12. Keputusan kelompok yang diperlukan
 
-1. Nama kelompok dan nama produk final. GeoHadir maupun alternatif branding belum mengubah identitas aplikasi.
-2. Scope lingkungan pendidikan: siswa, guru, angkatan; jangan menjanjikan produk lintas organisasi dulu.
-3. Konfirmasi dosen: apakah LB wajib atau tiga layanan lain diterima; bukti snapshot/restore dan bentuk demonstrasi scaling.
-4. B sebagai utama, A fallback berdasarkan quota/kredit; region, resource sizing, dan batas anggaran.
-5. Domain/subdomain untuk HTTPS.
-6. Titik demo/radius, terlambat, hari kegiatan, izin/alpha.
-7. Upgrade terarah Laravel/PHP yang didukung, bukan rewrite.
-8. Data dummy dan retensi foto; jangan publikasi data siswa lama.
+1. Platform final: AWS. Jika Progress 1 sudah dikumpulkan dengan platform lain, konfirmasi perubahan ke dosen sebelum provisioning.
+2. Konfirmasi dosen: apakah LB wajib atau tiga layanan lain diterima; bentuk bukti snapshot/restore dan demonstrasi scaling.
+3. Region (misal ap-southeast-1), sizing resource, dan batas anggaran.
+4. Domain/subdomain untuk HTTPS.
+5. Titik demo/radius, terlambat, hari kegiatan, izin/alpha.
+6. Upgrade terarah Laravel/PHP yang didukung, bukan rewrite.
+7. Data dummy dan retensi foto; jangan publikasi data siswa lama.
 
 Tidak perlu menambah mobile app, face recognition, CRUD lokasi, atau rewrite frontend tanpa kebutuhan kuat.
 
 ## 13. Draft Progress 1
 
-Draft berikut harus disesuaikan setelah nama kelompok/produk disepakati. Ini rencana, bukan klaim layanan sudah aktif.
+Draft berikut sudah memakai Attendify dan AWS. Ini rencana, bukan klaim layanan sudah aktif.
 
 ### A. IDENTITAS KELOMPOK
 
-Nama kelompok: [Belum ditentukan]
-Kelas: SSD 2024
+Nama kelompok: Kelompok 9
+Kelas: SSD-24
 
 1. M Irfan Al Hakim – 2404220023 – Ketua, Cloud/DevOps.
-2. Riski Cahya Alfiansyah – 2404220019 – Backend Developer.
-3. Isa Fitri Ulul Firdaus – 2404220033 – Database Administrator.
-4. Febriana Dwi Rahayu – 2404220042 – Frontend Developer dan Dokumentasi.
+2. Isa Fitri Ulul Firdaus – 2404220033 – Backend Developer.
+3. Febriana Dwi Rahayu – 2404220042 – Database Administrator.
+4. Riski Cahya Alfiansyah – 2404220019 – Frontend Developer dan Dokumentasi.
 
 ### B. TOPIK APLIKASI
 
-Judul usulan: **GeoHadir: Sistem Presensi Berbasis GPS dan Selfie**.
+Judul: **Attendify: Sistem Presensi Berbasis GPS dan Selfie**.
 
 Jenis: CRUD App / aplikasi web dinamis.
 
-GeoHadir merupakan pengembangan aplikasi Laravel yang menggunakan koordinat GPS untuk validasi jarak terhadap lokasi presensi dan foto selfie sebagai dokumentasi kehadiran. Aplikasi ditujukan bagi lingkungan pendidikan dengan peran Administrator, Guru, dan Siswa, serta pengelolaan siswa/angkatan, presensi, izin, riwayat, dan laporan. Pengembangan difokuskan pada penyempurnaan aplikasi dan penerapan infrastruktur cloud agar dapat diakses melalui HTTPS.
+Attendify merupakan pengembangan aplikasi Laravel yang menggunakan koordinat GPS untuk validasi jarak terhadap lokasi presensi dan foto selfie sebagai dokumentasi kehadiran. Aplikasi ditujukan bagi lingkungan pendidikan dengan peran Administrator, Guru, dan Siswa, serta pengelolaan siswa/angkatan, presensi, izin, riwayat, dan laporan. Pengembangan difokuskan pada penyempurnaan aplikasi dan penerapan infrastruktur cloud agar dapat diakses melalui HTTPS.
 
 ### C. PLATFORM CLOUD
 
-Platform: **Microsoft Azure**.
+Platform: **Amazon Web Services (AWS)**.
 
-Azure menyediakan layanan yang sesuai kebutuhan, yaitu Virtual Machines, Database for MySQL Flexible Server, Blob Storage, dan Monitor. Azure for Students menjadi pertimbangan pembelajaran, dengan resource disesuaikan terhadap kredit, biaya, quota, dan ketersediaan subscription. Load Balancer dievaluasi berdasarkan rubrik dan anggaran, belum menjadi layanan aktif.
+AWS dipilih karena sesuai dengan teknologi Attendify yang menggunakan Laravel dan MySQL. Amazon EC2 digunakan untuk menjalankan aplikasi, Amazon RDS for MySQL untuk database terkelola beserta backup dan pemulihan, Amazon S3 untuk penyimpanan foto privat, serta Amazon CloudWatch untuk logging dan monitoring. Integrasi S3 didukung driver yang didokumentasikan Laravel sehingga tidak memerlukan adapter khusus, sementara IAM role memungkinkan pembatasan akses aplikasi tanpa menyimpan kredensial permanen dalam repository. Pemilihan resource disesuaikan dengan kebutuhan demonstrasi, ketersediaan layanan pada Free Plan, serta anggaran.
 
 ### Catatan pengumpulan dan AI Disclosure
 
-Instruksi Progress 1 yang dibagikan meminta format A–C, deskripsi 2–3 kalimat, satu kiriman oleh ketua, serta topik tidak sama dengan kelompok lain. Perubahan topik/platform setelah pengiriman perlu konfirmasi dosen. Tanggal tenggat pada pengumuman: 11 November 2026 pukul 23.00; dokumen ini tidak membuktikan tugas sudah dikumpulkan.
+Instruksi Progress 1 meminta format A–C, deskripsi 2–3 kalimat, satu kiriman oleh ketua, serta topik tidak sama dengan kelompok lain. Perubahan platform setelah pengiriman perlu konfirmasi dosen; jika kiriman pertama memakai platform lain, sampaikan perubahan ke AWS pada konfirmasi tersebut.
 
-AI digunakan untuk membantu audit statis, identifikasi risiko, penelitian dokumentasi Azure, serta penyusunan rencana/dokumentasi. Kelompok harus meninjau hasilnya dan memperbarui disclosure sesuai bantuan yang benar-benar digunakan. AI belum melakukan deployment atau membuktikan fitur runtime pada audit ini.
+AI digunakan untuk membantu audit statis, identifikasi risiko, penelitian dokumentasi AWS, serta penyusunan rencana/dokumentasi. Kelompok harus meninjau hasilnya dan memperbarui disclosure sesuai bantuan yang benar-benar digunakan. AI belum melakukan deployment atau membuktikan fitur runtime pada audit ini.
 
 ## Referensi eksternal
 
 Referensi diperiksa pada audit 11 November 2026; kondisi/harga dapat berubah.
 
+- Laravel filesystem/S3: https://laravel.com/docs/10.x/filesystem
 - Laravel 10 dan akhir dukungan keamanan (4 Februari 2025): https://laravel.com/docs/10.x/releases
-- Azure for Students: https://azure.microsoft.com/en-us/free/students
-- Azure Retail Prices API: https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices
-- Endpoint harga: https://prices.azure.com/api/retail/prices
-- MySQL backup/restore snapshot dan transaction log: https://learn.microsoft.com/en-us/azure/mysql/flexible-server/concepts-backup-restore
-- Azure Monitor cost: https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/cost-usage
-- Azure Load Balancer: https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-overview
-- Budget bukan penghenti resource: https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets
-- VM states/billing: https://learn.microsoft.com/en-us/azure/virtual-machines/states-billing
-- Adapter Blob komunitas dan requirement: https://github.com/Azure-OSS/azure-storage-php-adapter-laravel/blob/main/composer.json
+- AWS Free Tier: https://aws.amazon.com/free/
+- AWS Free Tier FAQ: https://aws.amazon.com/free/free-tier-faqs/
+- VPC pricing (public IPv4, NAT): https://aws.amazon.com/vpc/pricing/
+- RDS automated backup: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html
+- AWS Price List EC2 ap-southeast-1: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/ap-southeast-1/index.csv
+- AWS Price List RDS ap-southeast-1: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonRDS/current/ap-southeast-1/index.csv
+- AWS Price List S3 ap-southeast-1: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonS3/current/ap-southeast-1/index.csv
+- CloudWatch pricing: https://aws.amazon.com/cloudwatch/pricing/
