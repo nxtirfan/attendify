@@ -43,3 +43,26 @@
 
 - `desktop.ini` hasil Google Drive/Windows Explorer pernah masuk ke dalam `.git/refs` dan merusak referensi git. Sudah dibersihkan; `desktop.ini` ada di `.gitignore`. Setelah setiap operasi lintas Drive, cek `git fsck` dan grep file sampah.
 - File hasil edit Drive bisa berubah encoding/BOM. Gerbang QA Fase 3 memeriksa diff per hunk sebelum commit.
+
+## Fase lanjutan: UI Refresh (Argon) — Login + Halaman Siswa
+
+- Status: dropzone siap, menunggu hasil drop Argon. Prioritas dari keputusan Irfan: login + halaman siswa dulu, gaya "Tabler tetap, dibedah identitas" (struktur DOM tidak dirombak, UX/logika tidak disentuh karena risiko bug).
+- Spesifikasi lengkap: `dropzone-attendify/SPEC-UI-ATTENDIFY.md`.
+- Palet final "Yurameku" (keinginan Irfan, referensi mood MV): primer indigo royal `#2E3AC7`, biru malam `#1E2A78`/`#0D1442`, aksen neon cyan `#5AD8E6` / pink `#F7A8D8` / amber `#FFC94D`, latar terang `#F4F6FE`. **Warna hijau/emerald dilarang.**
+- File yang boleh diubah Argon (Fase 1): `auth/login.blade.php`, `layouts/presensi.blade.php`, `layouts/bottom-nav.blade.php`, `dashboard/dashboardhome.blade.php`, plus file baru `public/assets/css/attendify.css` dan logo SVG. Kontrak beku: atribut `name`/`id`, `action`/`method`, `_token`, semua blok `<script>`/`@push('myscript')`, `@extends`/`@section`/`@include`, nama variabel Blade.
+- Sisa rebrand yang ditemukan dan masuk scope Fase 1: halaman login masih berjudul "Presensi Geolokasi" + logo lama `logopresensi.png`.
+- Gerbang QA setelah drop: grep kontrak beku, `php artisan view:cache` (kompilasi seluruh Blade), smoke test login 3 role + halaman presensi (kamera, GPS, peta, audio), commit per fase.
+
+## Alat QA: Chrome DevTools MCP
+
+- Keputusan: berguna dan dipakai. Instalasi server MCP `chrome-devtools` dilakukan Irfan di sesi chat lain (bukan di sesi ini).
+- Peran dalam proyek: (1) QA drop UI — console errors/warnings, computed styles, screenshot sebelum/sesudah per halaman; (2) **emulasi geolocation** untuk menguji radius presensi 20 m dari dalam/meja: titik di dalam radius → diterima, di luar → ditolak "jarak terlalu jauh", tanpa perlu ke lokasi sekolah; (3) smoke test otomatis login 3 role (isi form, submit, verifikasi redirect per role).
+- Batas yang disadari: WebcamJS/getUserMedia tidak bisa dipalsukan lewat MCP — butuh Chrome diluncurkan dengan flag `--use-fake-device-for-media-stream --use-fake-ui-for-media-stream` (terpisah, via launch executable). DevTools MCP hanya mencakup browser; windows-mcp tetap dipakai untuk pekerjaan di luar browser.
+
+## Belum diputuskan (Batch D — AWS staging)
+
+Pertanyaan berikut masih terbuka sebelum provisioning AWS dimulai:
+1. Domain untuk HTTPS (wajib — Geolocation hanya jalan di origin aman): punya domain sendiri / subdomain gratis / beli?
+2. Status akun AWS + cek saldo/benefit Free Plan.
+3. Region: ap-southeast-1 (Singapore) / ap-southeast-3 (Jakarta) / us-east-1.
+4. Load Balancer: tunggu konfirmasi dosen, atau langsung 1 EC2 + scaling vertikal.
