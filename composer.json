@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "attendify/app",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "Attendify: Sistem Presensi Berbasis GPS dan Selfie.",
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {

@@ -30,8 +30,8 @@
 
 - [x] Fase 0: pindah checkout ke `D:\Dev\attendify`, verifikasi git (fsck, status, remote). Drive di-pause selama pemindahan, di-resume setelah dropzone siap.
 - [x] Fase 1: buat dropzone berisi salinan file target (struktur folder mengikuti path repo) plus `SPEC-REBRAND.md`; tulis README Attendify.
-- [ ] Fase 2: Argon mengedit file di dropzone, lalu Irfan mengabari OpenCode.
-- [ ] Fase 3: OpenCode salin hasil dari dropzone ke checkout, review `git diff` hunk per hunk, grep string legacy habis, `php -l` file yang tersentuh, cek sampah sync (`desktop.ini`, BOM), commit `rebrand: Attendify UI, composer, dan metadata`, push ke `origin/main`.
+- [x] Fase 2: Argon mengedit file di dropzone, lalu Irfan mengabari OpenCode.
+- [x] Fase 3: OpenCode salin hasil dari dropzone ke checkout, review `git diff` hunk per hunk, grep string legacy habis, `php -l` file yang tersentuh, cek sampah sync (`desktop.ini`, BOM), commit `rebrand: Attendify UI, composer, dan metadata`, push ke `origin/main`.
 
 ## Aturan untuk Argon (ringkas; versi lengkap di dropzone)
 

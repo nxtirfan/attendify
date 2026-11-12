@@ -7,7 +7,7 @@
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </a>
         </div>
-        <div class="pageTitle">Presensi GPS</div>
+        <div class="pageTitle">Attendify</div>
         <div class="right"></div>
     </div>
     <!-- * App Header -->
