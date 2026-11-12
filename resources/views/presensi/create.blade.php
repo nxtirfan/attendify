@@ -122,19 +122,39 @@
         }).addTo(map);
         var marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
         // var circle = L.circle([-7.015284, 110.380915], {-6.996044, 110.392116
-        var circle = L.circle([-7.018907, 110.359350], {
+        var circle = L.circle([{{ $sekolah_lat }}, {{ $sekolah_lng }}], {
 
             color: 'red',
             fillColor: '#f03',
             fillOpacity: 0.5,
-            radius: 20
+            radius: {{ $radius_m }}
         }).addTo(map);
     }
 
     function errorCallback(error) {
+        var pesan = 'Gagal mendapatkan lokasi. Izinkan akses lokasi pada browser, lalu muat ulang halaman.';
+        if (error.code === error.PERMISSION_DENIED) {
+            pesan = 'Akses lokasi ditolak. Aktifkan izin lokasi untuk situs ini, lalu muat ulang halaman.';
+        }
+        lokasi.value = '';
+        Swal.fire({
+            title: 'Lokasi tidak tersedia',
+            text: pesan,
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
     }
 
     $("#takeabsen").click(function() {
+        if (!$("#lokasi").val()) {
+            Swal.fire({
+                title: 'Lokasi belum siap',
+                text: 'Mohon izinkan akses lokasi dan tunggu hingga lokasi terdeteksi sebelum presensi.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
         Webcam.snap(function(uri) {
             image = uri;
         });

@@ -390,10 +390,10 @@
 
             $("#frmSiswa").submit(function () {
                 var nis = $("#nis").val();
-                var nama_lengkap = $("frmSiswa").find("#nama_lengkap").val();
+                var nama_lengkap = $("#frmSiswa").find("#nama_lengkap").val();
                 var kelas = $("#kelas").val();
                 var no_hp = $("#no_hp").val();
-                var angkatan_id = $("frmSiswa").find("#angkatan_id").val();
+                var angkatan_id = $("#frmSiswa").find("#angkatan_id").val();
                 // var angkatan_id = $("#angkatan_id").val();
 
                 if (nis == "") {

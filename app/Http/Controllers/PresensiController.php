@@ -20,7 +20,11 @@ class PresensiController extends Controller
 
         // Cek untuk menampilkan tombol presensi masuk atau keluar di view
         $cek = DB::table('presensi')->where('tgl_presensi', $hariini)->where('siswa_id', $siswa_id)->count();
-        return view('presensi.create', compact('cek', 'hariini'));
+        return view('presensi.create', compact('cek', 'hariini') + [
+            'sekolah_lat' => config('presensi.sekolah_lat'),
+            'sekolah_lng' => config('presensi.sekolah_lng'),
+            'radius_m' => config('presensi.radius_m'),
+        ]);
     }
 
     public function store(Request $request)
@@ -30,14 +34,11 @@ class PresensiController extends Controller
         $tgl_presensi = date('Y-m-d'); // Ambil tanggal saat ini
         $jam = date('H:i:s'); // Ambil jam saat ini
 
-        $status = $jam > '07:00:00' ? 'terlambat' : 'hadir'; // Efisienkan status presensi masuk
+        $status = $jam > config('presensi.jam_masuk', '07:00:00') ? 'terlambat' : 'hadir'; // Efisienkan status presensi masuk
 
 
-        $latitudesekolah = -7.018907; // Latitude dan Longitude sekolah
-        $longitudeskolah = 110.359350;
-
-        // $latitudesekolah = -7.015284; // Latitude dan Longitude sekolah -7.041830, 110.365895
-        // $longitudeskolah = 110.380915; -6.996044, 110.392116
+        $latitudesekolah = config('presensi.sekolah_lat'); // Latitude dan Longitude sekolah
+        $longitudeskolah = config('presensi.sekolah_lng');
 
         $lokasi = $request->lokasi; // Ambil lokasi
         $lokasiuser = explode(',', $lokasi); // Pisahkan lokasi menjadi array
@@ -46,10 +47,16 @@ class PresensiController extends Controller
 
         $jarak = $this->distance($latitudesekolah, $longitudeskolah, $latitudeuser, $longitudeuser); // Hitung jarak
         $radius = round($jarak['meters']); // Ambil jarak dalam meter
+        $radiusMax = config('presensi.radius_m', 20); // Radius presensi dari konfigurasi
 
         // Cek apakah siswa sudah melakukan presensi pada hari ini
-        $cek = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('siswa_id', $siswa_id)->count();
-        if ($cek > 0) {
+        $presensiHariIni = DB::table('presensi')->where('tgl_presensi', $tgl_presensi)->where('siswa_id', $siswa_id)->first();
+        if ($presensiHariIni && !empty($presensiHariIni->jam_out)) {
+            // Sudah presensi masuk dan pulang, tolak presensi berulang
+            echo "error|Mohon maaf, $nis, Anda sudah melakukan presensi masuk dan pulang hari ini|out";
+            return;
+        }
+        if ($presensiHariIni) {
             // Keterangan untuk presensi keluar
             $ket = "out"; // Status keluar
         } else {
@@ -67,11 +74,11 @@ class PresensiController extends Controller
 
 
         // Validasi jarak presensi
-        if ($radius > 20) {
+        if ($radius > $radiusMax) {
             echo "error|Mohon maaf, $nis, jarak presensi Anda terlalu jauh dari sekolah. Jarak Anda saat ini $radius meter|radius"; // Jarak terlalu jauh
         } else {
             // Jika jarak presensi valid, lanjutkan proses presensi
-            if ($cek > 0) {
+            if ($ket == "out") {
 
                 // Data untuk presensi keluar
                 $data_pulang = [
@@ -104,7 +111,12 @@ class PresensiController extends Controller
                 ];
 
                 // Simpan data presensi masuk
-                $simpan = DB::table('presensi')->insert($data);
+                try {
+                    $simpan = DB::table('presensi')->insert($data);
+                } catch (\Illuminate\Database\QueryException $e) {
+                    // Duplikasi presensi (misal dua request bersamaan) ditolak constraint unique
+                    $simpan = false;
+                }
                 if ($simpan) {
                     echo "success|Terima kasih, $nis, telah presensi masuk|in"; // Berhasil menyimpan data presensi
                     Storage::put($file, $image_base64);
@@ -506,7 +518,24 @@ class PresensiController extends Controller
         $id_izinsakit_form = $request->id_izinsakit_form;
         $update = DB::table('izin')->where('izin_id', $id_izinsakit_form)->update(['status_approved' => $status_approved]);
 
-        if($update) {
+        if ($update) {
+            // Sinkronkan hasil persetujuan dengan tabel presensi
+            $izin = DB::table('izin')->where('izin_id', $id_izinsakit_form)->first();
+            if ($status_approved == 'disetujui' && $izin) {
+                $presensiUpdate = DB::table('presensi')
+                    ->where('siswa_id', $izin->siswa_id)
+                    ->where('tgl_presensi', $izin->tgl_izin)
+                    ->update(['status' => $izin->status]);
+                if (!$presensiUpdate) {
+                    DB::table('presensi')->insert([
+                        'siswa_id' => $izin->siswa_id,
+                        'tgl_presensi' => $izin->tgl_izin,
+                        'status' => $izin->status,
+                    ]);
+                }
+            } elseif ($status_approved == 'ditolak' && $izin) {
+                $this->hapusPresensiIzin($izin);
+            }
             return Redirect::back()->with('success', 'Data berhasil diupdate');
         } else {
             return Redirect::back()->with('error', 'Data gagal diupdate');
@@ -518,10 +547,26 @@ class PresensiController extends Controller
         $update = DB::table('izin')->where('izin_id', $izin_id)->update(['status_approved' => "pending"]);
 
         if($update) {
+            // Kembalikan ke pending berarti cabut presensi izin yang sempat tersinkron
+            $izin = DB::table('izin')->where('izin_id', $izin_id)->first();
+            if ($izin) {
+                $this->hapusPresensiIzin($izin);
+            }
             return Redirect::back()->with('success', 'Data berhasil diupdate');
         } else {
             return Redirect::back()->with('error', 'Data gagal diupdate');
         }
+    }
+
+    private function hapusPresensiIzin($izin)
+    {
+        // Hapus presensi hasil sinkron izin hanya jika siswa memang tidak pernah absen (tanpa jam masuk)
+        DB::table('presensi')
+            ->where('siswa_id', $izin->siswa_id)
+            ->where('tgl_presensi', $izin->tgl_izin)
+            ->whereIn('status', ['izin', 'sakit'])
+            ->whereNull('jam_in')
+            ->delete();
     }
 
     public function cekizin(Request $request)

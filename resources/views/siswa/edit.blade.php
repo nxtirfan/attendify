@@ -80,7 +80,6 @@
         <div class="col-12">
             <div class="mt-2">
                 <input type="file" id="foto" class="form-control" name="foto">
-                <input type="hidden" id="old_foto" value="{{ $siswa->foto }}">
 
             </div>
         </div>

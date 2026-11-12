@@ -180,7 +180,10 @@ class SiswaController extends Controller
         $kelas = $request->kelas;
         $no_hp = $request->no_hp;
         $angkatan_id = $request->angkatan_id;
-        $old_foto = $request->old_foto;
+
+        // Foto lama diambil dari database, bukan dari request (tidak bisa dipercaya)
+        $siswa = DB::table('siswa')->where('nis', $nis)->first();
+        $old_foto = $siswa->foto;
 
         if ($request->hasFile('foto')) {
             $foto = $nis . "." . $request->file('foto')->getClientOriginalExtension();

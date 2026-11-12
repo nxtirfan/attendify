@@ -46,7 +46,7 @@ Route::get('/', function () {
             case 'Admin':
                 return redirect()->route('admin');
             case 'Guru':
-                return redirect()->route('dashboard.guru'); // pastikan rute ini ada
+                return redirect()->route('guru');
             case 'Siswa':
                 return redirect()->route('dashboard');
             default:
@@ -80,7 +80,7 @@ Route::middleware(['auth', 'cekrole:Siswa'])->group(function () {
 
     //Presensi Routes
     Route::get('/presensi/create', [App\Http\Controllers\PresensiController::class, 'create'])->name('create');
-    Route::post('/presensi/store', [App\Http\Controllers\PresensiController::class, 'store'])->name('store');
+    Route::post('/presensi/store', [App\Http\Controllers\PresensiController::class, 'store'])->name('presensi.store');
 
     //Edit Profile
     Route::get('/editprofile', [App\Http\Controllers\PresensiController::class, 'editprofile'])->name('editprofile');
@@ -104,43 +104,43 @@ Route::middleware(['auth', 'cekrole:Admin'])->group(function () {
 
     //Siswa
     Route::get('/siswa', [App\Http\Controllers\SiswaController::class, 'index'])->name('siswa');
-    Route::post('/siswa/store', [App\Http\Controllers\SiswaController::class, 'store'])->name('store');
-    Route::post('/siswa/edit', [App\Http\Controllers\SiswaController::class, 'edit'])->name('edit');
-    Route::post('/siswa/{nis}/update', [App\Http\Controllers\SiswaController::class, 'update'])->name('update');
-    Route::post('/siswa/{nis}/delete', [App\Http\Controllers\SiswaController::class, 'delete'])->name('delete');
+    Route::post('/siswa/store', [App\Http\Controllers\SiswaController::class, 'store'])->name('siswa.store');
+    Route::post('/siswa/edit', [App\Http\Controllers\SiswaController::class, 'edit'])->name('siswa.edit');
+    Route::post('/siswa/{nis}/update', [App\Http\Controllers\SiswaController::class, 'update'])->name('siswa.update');
+    Route::post('/siswa/{nis}/delete', [App\Http\Controllers\SiswaController::class, 'delete'])->name('siswa.delete');
 
     // Angkatan
     Route::get('/angkatan', [App\Http\Controllers\AngkatanController::class, 'index'])->name('angkatan');
-    Route::post('/angkatan/store', [App\Http\Controllers\AngkatanController::class, 'store'])->name('store');
-    Route::post('/angkatan/edit', [App\Http\Controllers\AngkatanController::class, 'edit'])->name('edit');
-    Route::post('/angkatan/{angkatan_id}/update', [App\Http\Controllers\AngkatanController::class, 'update'])->name('update');
-    Route::post('/angkatan/{angkatan_id}/delete', [App\Http\Controllers\AngkatanController::class, 'delete'])->name('delete');
+    Route::post('/angkatan/store', [App\Http\Controllers\AngkatanController::class, 'store'])->name('angkatan.store');
+    Route::post('/angkatan/edit', [App\Http\Controllers\AngkatanController::class, 'edit'])->name('angkatan.edit');
+    Route::post('/angkatan/{angkatan_id}/update', [App\Http\Controllers\AngkatanController::class, 'update'])->name('angkatan.update');
+    Route::post('/angkatan/{angkatan_id}/delete', [App\Http\Controllers\AngkatanController::class, 'delete'])->name('angkatan.delete');
 
     // Monitoring
-    Route::get('/monitoring', [App\Http\Controllers\PresensiController::class, 'monitoring'])->name('monitoring');
-    Route::post('/getpresensi', [App\Http\Controllers\PresensiController::class, 'getpresensi'])->name('getpresensi');
-    Route::post('/tampilkanpeta', [App\Http\Controllers\PresensiController::class, 'tampilkanpeta'])->name('tampilkanpeta');
+    Route::get('/monitoring', [App\Http\Controllers\PresensiController::class, 'monitoring'])->name('admin.monitoring');
+    Route::post('/getpresensi', [App\Http\Controllers\PresensiController::class, 'getpresensi'])->name('admin.getpresensi');
+    Route::post('/tampilkanpeta', [App\Http\Controllers\PresensiController::class, 'tampilkanpeta'])->name('admin.tampilkanpeta');
     Route::get('/laporan', [App\Http\Controllers\PresensiController::class, 'laporan'])->name('laporan');
-    Route::post('/presensi/cetaklaporan', [App\Http\Controllers\PresensiController::class, 'cetaklaporan'])->name('cetaklaporan');
+    Route::post('/presensi/cetaklaporan', [App\Http\Controllers\PresensiController::class, 'cetaklaporan'])->name('admin.cetaklaporan');
     Route::get('/rekap', [App\Http\Controllers\PresensiController::class, 'rekap'])->name('rekap');
-    Route::post('/presensi/cetakrekap', [App\Http\Controllers\PresensiController::class, 'cetakrekap'])->name('cetakrekap');
-    Route::get('/izinsakit', [App\Http\Controllers\PresensiController::class, 'izinsakit'])->name('izinsakit');
-    Route::post('/presensi/approveizinsakit', [App\Http\Controllers\PresensiController::class, 'approveizinsakit'])->name('approveizinsakit');
-    Route::get('/presensi/{izin_id}/batalkanizinsakit', [App\Http\Controllers\PresensiController::class, 'batalkanizinsakit'])->name('batalkanizinsakit');
+    Route::post('/presensi/cetakrekap', [App\Http\Controllers\PresensiController::class, 'cetakrekap'])->name('admin.cetakrekap');
+    Route::get('/izinsakit', [App\Http\Controllers\PresensiController::class, 'izinsakit'])->name('admin.izinsakit');
+    Route::post('/presensi/approveizinsakit', [App\Http\Controllers\PresensiController::class, 'approveizinsakit'])->name('admin.approveizinsakit');
+    Route::get('/presensi/{izin_id}/batalkanizinsakit', [App\Http\Controllers\PresensiController::class, 'batalkanizinsakit'])->name('admin.batalkanizinsakit');
 });
 
 Route::middleware(['auth', 'cekrole:Guru'])->group(function () {
     //guru
     Route::get('/guru', [App\Http\Controllers\DashboardController::class, 'guru'])->name('guru');
-    Route::get('/monitoringguru', [App\Http\Controllers\GuruController::class, 'monitoring'])->name('monitoring');
-    Route::post('/getpresensiguru', [App\Http\Controllers\GuruController::class, 'getpresensi'])->name('getpresensi');
-    Route::post('/tampilkanpetaguru', [App\Http\Controllers\GuruController::class, 'tampilkanpeta'])->name('tampilkanpeta');
-    Route::get('/laporanguru', [App\Http\Controllers\GuruController::class, 'laporan'])->name('laporan');
-    Route::post('/presensi/cetaklaporanguru', [App\Http\Controllers\GuruController::class, 'cetaklaporan'])->name('cetaklaporan');
-    Route::get('/rekapguru', [App\Http\Controllers\GuruController::class, 'rekap'])->name('rekap');
-    Route::post('/presensi/cetakrekapguru', [App\Http\Controllers\GuruController::class, 'cetakrekap'])->name('cetakrekap');
-    Route::get('/izinsakitguru', [App\Http\Controllers\GuruController::class, 'izinsakit'])->name('izinsakit');
-    Route::post('/presensi/approveizinsakitguru', [App\Http\Controllers\GuruController::class, 'approveizinsakit'])->name('approveizinsakit');
-    Route::get('/presensi/{izin_id}/batalkanizinsakitguru', [App\Http\Controllers\GuruController::class, 'batalkanizinsakit'])->name('batalkanizinsakit');
+    Route::get('/monitoringguru', [App\Http\Controllers\GuruController::class, 'monitoring'])->name('guru.monitoring');
+    Route::post('/getpresensiguru', [App\Http\Controllers\GuruController::class, 'getpresensi'])->name('guru.getpresensi');
+    Route::post('/tampilkanpetaguru', [App\Http\Controllers\GuruController::class, 'tampilkanpeta'])->name('guru.tampilkanpeta');
+    Route::get('/laporanguru', [App\Http\Controllers\GuruController::class, 'laporan'])->name('laporanguru');
+    Route::post('/presensi/cetaklaporanguru', [App\Http\Controllers\GuruController::class, 'cetaklaporan'])->name('guru.cetaklaporan');
+    Route::get('/rekapguru', [App\Http\Controllers\GuruController::class, 'rekap'])->name('rekapguru');
+    Route::post('/presensi/cetakrekapguru', [App\Http\Controllers\GuruController::class, 'cetakrekap'])->name('guru.cetakrekap');
+    Route::get('/izinsakitguru', [App\Http\Controllers\GuruController::class, 'izinsakit'])->name('guru.izinsakit');
+    Route::post('/presensi/approveizinsakitguru', [App\Http\Controllers\GuruController::class, 'approveizinsakit'])->name('guru.approveizinsakit');
+    Route::get('/presensi/{izin_id}/batalkanizinsakitguru', [App\Http\Controllers\GuruController::class, 'batalkanizinsakit'])->name('guru.batalkanizinsakit');
 });
 
