@@ -64,8 +64,11 @@ class GuruController extends Controller
     public function cetaklaporan(Request $request)
     {
         $nis = $request->nis;
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
+        $bulan = (int) $request->bulan;
+        $tahun = (int) $request->tahun;
+        if ($bulan < 1 || $bulan > 12 || $tahun < 2000 || $tahun > 2100) {
+            return Redirect::back()->with('error', 'Bulan atau tahun tidak valid');
+        }
         $namabulan = [
             '',
             'Januari',
@@ -87,8 +90,8 @@ class GuruController extends Controller
         $presensi = DB::table('presensi')
             ->join('siswa', 'presensi.siswa_id', '=', 'siswa.siswa_id')
             ->where('nis', $nis)
-            ->whereRaw('MONTH(tgl_presensi) ="' . $bulan . '"')
-            ->whereRaw('YEAR(tgl_presensi) ="' . $tahun . '"')
+            ->whereMonth('tgl_presensi', $bulan)
+            ->whereYear('tgl_presensi', $tahun)
             ->orderBy('tgl_presensi', 'asc')
             ->get();
 
@@ -121,8 +124,11 @@ class GuruController extends Controller
     }
 
     public function cetakrekap (Request $request) {
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
+        $bulan = (int) $request->bulan;
+        $tahun = (int) $request->tahun;
+        if ($bulan < 1 || $bulan > 12 || $tahun < 2000 || $tahun > 2100) {
+            return Redirect::back()->with('error', 'Bulan atau tahun tidak valid');
+        }
         $namabulan = [
             '',
             'Januari',
@@ -174,8 +180,8 @@ class GuruController extends Controller
                 MAX(IF(DAY(tgl_presensi) = 30, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")),"")) as tgl_30,
                 MAX(IF(DAY(tgl_presensi) = 31, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")),"")) as tgl_31')
         ->join('siswa', 'presensi.siswa_id', '=', 'siswa.siswa_id')
-        ->whereRaw('MONTH(tgl_presensi)="' . $bulan . '"')
-        ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
+        ->whereMonth('tgl_presensi', $bulan)
+        ->whereYear('tgl_presensi', $tahun)
         ->groupByRaw('siswa.nis,nama_lengkap')
         ->get();
 

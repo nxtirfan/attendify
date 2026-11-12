@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PresensiController;
@@ -57,14 +56,6 @@ Route::get('/', function () {
     }
 
     return redirect()->route('login');
-});
-
-
-Route::get('/cekhash', function () {
-    $password = 'admin123';
-    $hashed = Hash::make($password);
-
-    dd($hashed); // tampilkan hasil hash password
 });
 
 
@@ -153,6 +144,3 @@ Route::middleware(['auth', 'cekrole:Guru'])->group(function () {
     Route::get('/presensi/{izin_id}/batalkanizinsakitguru', [App\Http\Controllers\GuruController::class, 'batalkanizinsakit'])->name('batalkanizinsakit');
 });
 
-Route::get('/generate-password', function () {
-    return Hash::make('password1');
-});

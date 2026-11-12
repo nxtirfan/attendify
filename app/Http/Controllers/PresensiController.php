@@ -234,17 +234,20 @@ class PresensiController extends Controller
 
     public function gethistori(Request $request)
     {
-        $bulan = $request->bulan; // Ambil bulan dari request
-        $tahun = $request->tahun; // Ambil tahun dari request
+        $bulan = (int) $request->bulan;
+        $tahun = (int) $request->tahun;
         $nis = Auth::user()->siswa->nis; // Ambil NIS dari user yang sedang login
         $siswa_id = Auth::user()->siswa->siswa_id; // Ambil siswa ID dari user yang sedang login
 
-        $histori = DB::table('presensi')
-            ->whereRaw('MONTH(tgl_presensi) ="' . $bulan . '"')
-            ->whereRaw('YEAR(tgl_presensi) ="' . $tahun . '"')
-            ->where('siswa_id', $siswa_id)
-            ->orderBy('tgl_presensi', 'desc')
-            ->get();
+        $histori = collect();
+        if ($bulan >= 1 && $bulan <= 12 && $tahun >= 2000 && $tahun <= 2100) {
+            $histori = DB::table('presensi')
+                ->where('siswa_id', $siswa_id)
+                ->whereMonth('tgl_presensi', $bulan)
+                ->whereYear('tgl_presensi', $tahun)
+                ->orderBy('tgl_presensi', 'desc')
+                ->get();
+        }
 
         return view('presensi.gethistori', compact('histori'));
     }
@@ -336,8 +339,11 @@ class PresensiController extends Controller
     public function cetaklaporan(Request $request)
     {
         $nis = $request->nis;
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
+        $bulan = (int) $request->bulan;
+        $tahun = (int) $request->tahun;
+        if ($bulan < 1 || $bulan > 12 || $tahun < 2000 || $tahun > 2100) {
+            return Redirect::back()->with('error', 'Bulan atau tahun tidak valid');
+        }
         $namabulan = [
             '',
             'Januari',
@@ -359,8 +365,8 @@ class PresensiController extends Controller
         $presensi = DB::table('presensi')
             ->join('siswa', 'presensi.siswa_id', '=', 'siswa.siswa_id')
             ->where('nis', $nis)
-            ->whereRaw('MONTH(tgl_presensi) ="' . $bulan . '"')
-            ->whereRaw('YEAR(tgl_presensi) ="' . $tahun . '"')
+            ->whereMonth('tgl_presensi', $bulan)
+            ->whereYear('tgl_presensi', $tahun)
             ->orderBy('tgl_presensi', 'asc')
             ->get();
 
@@ -393,8 +399,11 @@ class PresensiController extends Controller
     }
 
     public function cetakrekap (Request $request) {
-        $bulan = $request->bulan;
-        $tahun = $request->tahun;
+        $bulan = (int) $request->bulan;
+        $tahun = (int) $request->tahun;
+        if ($bulan < 1 || $bulan > 12 || $tahun < 2000 || $tahun > 2100) {
+            return Redirect::back()->with('error', 'Bulan atau tahun tidak valid');
+        }
         $namabulan = [
             '',
             'Januari',
@@ -446,8 +455,8 @@ class PresensiController extends Controller
                 MAX(IF(DAY(tgl_presensi) = 30, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")),"")) as tgl_30,
                 MAX(IF(DAY(tgl_presensi) = 31, CONCAT(jam_in, "-", IFNULL(jam_out, "00:00:00")),"")) as tgl_31')
         ->join('siswa', 'presensi.siswa_id', '=', 'siswa.siswa_id')
-        ->whereRaw('MONTH(tgl_presensi)="' . $bulan . '"')
-        ->whereRaw('YEAR(tgl_presensi)="' . $tahun . '"')
+        ->whereMonth('tgl_presensi', $bulan)
+        ->whereYear('tgl_presensi', $tahun)
         ->groupByRaw('siswa.nis,nama_lengkap')
         ->get();
 

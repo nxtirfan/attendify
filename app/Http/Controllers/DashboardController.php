@@ -19,8 +19,8 @@ class DashboardController extends Controller
         $presensitoday = DB::table('presensi')->where('siswa_id', $siswa_id)->where('tgl_presensi', $hariini)->first();
         $historibulanini = DB::table('presensi')
             ->where('siswa_id', $siswa_id)
-            ->whereRaw('MONTH(tgl_presensi)="' . $bulanini . '"')
-            ->whereRaw('YEAR(tgl_presensi)="' . $tahunini . '"')
+            ->whereMonth('tgl_presensi', $bulanini)
+            ->whereYear('tgl_presensi', $tahunini)
             ->orderByDesc('tgl_presensi')
             ->get(); // Ambil data presensi bulan ini
 
@@ -29,14 +29,14 @@ class DashboardController extends Controller
         $rekappresensi = DB::table('presensi')
             ->selectRaw('COUNT(siswa_id) as jmlhadir, IFNULL(SUM(IF(jam_in > \'07:00\',1,0)), 0) as jmlterlambat')
             ->where('siswa_id', $siswa_id)
-            ->whereRaw('MONTH(tgl_presensi)="' . $bulanini . '"')
-            ->whereRaw('YEAR(tgl_presensi)="' . $tahunini . '"')
+            ->whereMonth('tgl_presensi', $bulanini)
+            ->whereYear('tgl_presensi', $tahunini)
             ->first();
 
         $leaderboard = DB::table('presensi')
             ->join('siswa', 'presensi.siswa_id', '=', 'siswa.siswa_id')
-            ->whereRaw('MONTH(tgl_presensi)="' . $bulanini . '"')
-            ->whereRaw('YEAR(tgl_presensi)="' . $tahunini . '"')
+            ->whereMonth('tgl_presensi', $bulanini)
+            ->whereYear('tgl_presensi', $tahunini)
             ->get();
         
         $namabulan = [
@@ -58,8 +58,8 @@ class DashboardController extends Controller
         $rekapizin = DB::table('izin')
             ->selectRaw('IFNULL(SUM(IF(status="izin",1,0)), 0) as jmlizin,IFNULL(SUM(IF(status="sakit",1,0)),0) as jmlsakit')
             ->where('siswa_id', $siswa_id)
-            ->whereRaw('MONTH(tgl_izin)="' . $bulanini . '"')
-            ->whereRaw('YEAR(tgl_izin)="' . $tahunini . '"')
+            ->whereMonth('tgl_izin', $bulanini)
+            ->whereYear('tgl_izin', $tahunini)
             ->where('status_approved', 'disetujui')
             ->first();
 
