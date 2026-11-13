@@ -833,10 +833,12 @@ body.attendify-student-body #appCapsule {
 }
 
 .attendify-presence-card .iconpresence img.imaged {
-    width: 100% !important;
-    height: 100% !important;
+    width: 42px !important;
+    height: 42px !important;
+    margin: 5px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 10px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.25);
 }
 
 .attendify-presence-card--in .iconpresence ion-icon {
@@ -1428,3 +1430,47 @@ body.attendify-student-body #appCapsule {
 .custom-file-upload.attendify-upload-box label span ion-icon {
     color: var(--att-indigo) !important;
 }
+
+/* ==========================================================================
+   9. QA PATCH � perbaikan tumpang tindih & terpotong (OpenCode, 13 Nov 2026)
+   ========================================================================== */
+
+/* A. Kartu statistik rekap: 2x2 di semua lebar agar teks tidak terpotong */
+.row:has(> .col-6 .attendify-stat-card) > .col-6 {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+}
+.attendify-stat-card .card-body {
+    min-width: 0;
+    padding: 12px !important;
+    gap: 10px !important;
+}
+.attendify-stat-card h4 {
+    font-size: 0.78rem !important;
+    margin-bottom: 0;
+}
+.attendify-stat-card .presensidetail span {
+    font-size: 0.72rem !important;
+    white-space: nowrap;
+}
+
+/* B. Thumbnail foto presensi masuk/pulang: pas di dalam kotak (rule kanonis di atas) */
+.attendify-presence-card .iconpresence {
+    overflow: hidden;
+    border-radius: 14px;
+    flex: 0 0 auto;
+}
+
+/* C. Frame webcam: ikuti tinggi video asli, jangan paksa 480px dari WebcamJS */
+.attendify-webcam-frame .webcam-capture[style] {
+    width: 100% !important;
+    height: auto !important;
+}
+.attendify-webcam-frame .webcam-capture video {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 340px !important;
+    object-fit: cover !important;
+    border-radius: 12px;
+}
+
