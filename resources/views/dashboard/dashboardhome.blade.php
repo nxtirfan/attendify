@@ -158,26 +158,26 @@
                 <div class="row g-3">
                     <div class="col-6 col-md-3">
                         <div class="card attendify-stat-card">
-                            <div class="card-body d-flex align-items-center justify-content-center gap-2" style="padding: 12px 12px !important; line-height:0.8rem">
+                            <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--hadir">
                                     <ion-icon name="accessibility-outline"></ion-icon>
                                 </div>
-                                <div class="presensidetail text-start ml-1" style="display: flex; flex-direction: column;">
-                                    <h4 style="font-size: 0.8rem; margin-bottom:0">Hadir</h4>
-                                    <span style="font-size: 0.8rem; font-weight:500;">{{ $rekappresensi->jmlhadir }} hari</span>
+                                <div class="presensidetail text-start ml-1">
+                                    <h4>Hadir</h4>
+                                    <span>{{ $rekappresensi->jmlhadir }} hari</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="card attendify-stat-card">
-                            <div class="card-body d-flex align-items-center justify-content-center gap-2" style="padding: 12px 12px !important; line-height:0.8rem">
+                            <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--izin">
                                     <ion-icon name="newspaper-outline"></ion-icon>
                                 </div>
-                                <div class="presensidetail ml-1" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left;">
-                                    <h4 style="font-size: 0.8rem; margin-bottom:0">Izin</h4>
-                                    <span style="font-size: 0.8rem; font-weight:500;">{{ $rekapizin->jmlizin }} hari</span>
+                                <div class="presensidetail ml-1">
+                                    <h4>Izin</h4>
+                                    <span>{{ $rekapizin->jmlizin }} hari</span>
                                 </div>
                             </div>
                         </div>
@@ -188,26 +188,26 @@
 
                     <div class="col-6 col-md-3">
                         <div class="card attendify-stat-card">
-                            <div class="card-body d-flex align-items-center justify-content-center gap-2" style="padding: 12px 12px !important; line-height:0.8rem">
+                            <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--pink">
                                     <ion-icon name="medkit-outline"></ion-icon>
                                 </div>
-                                <div class="presensidetail ml-1" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left;">
-                                    <h4 style="font-size: 0.8rem; margin-bottom:0">Sakit</h4>
-                                    <span style="font-size: 0.8rem; font-weight:500;">{{ $rekapizin->jmlsakit }} hari</span>
+                                <div class="presensidetail ml-1">
+                                    <h4>Sakit</h4>
+                                    <span>{{ $rekapizin->jmlsakit }} hari</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-md-3">
                         <div class="card attendify-stat-card">
-                            <div class="card-body d-flex align-items-center justify-content-center gap-2" style="padding: 12px 12px !important; line-height:0.8rem">
+                            <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--terlambat">
                                     <ion-icon name="alarm-outline"></ion-icon>
                                 </div>
-                                <div class="presensidetail ml-1" style="display: flex; flex-direction: column; align-items: flex-start; text-align: left;">
-                                    <h4 style="font-size: 0.8rem; margin-bottom:0">Terlambat</h4>
-                                    <span style="font-size: 0.8rem; font-weight:500;">{{ $rekappresensi->jmlterlambat }} hari</span>
+                                <div class="presensidetail ml-1">
+                                    <h4>Terlambat</h4>
+                                    <span>{{ $rekappresensi->jmlterlambat }} hari</span>
                                 </div>
                             </div>
                         </div>

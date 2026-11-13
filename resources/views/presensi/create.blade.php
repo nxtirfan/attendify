@@ -1,7 +1,7 @@
 @extends('layouts.presensi')
 @section('header')
     <!-- App Header -->
-    <div class="appHeader bg-primary text-light">
+    <div class="appHeader bg-primary text-light attendify-subheader">
         <div class="left">
             <a href="javascript:;" class="headerButton goBack">
                 <ion-icon name="chevron-back-outline"></ion-icon>
@@ -17,7 +17,7 @@
             justify-content: center !important;
             align-items: center !important;
             width: 100% !important;
-            margin-bottom: 10px !important;
+            margin-bottom: 0 !important;
         }
         
         .webcam-capture video {
@@ -25,18 +25,14 @@
             max-width: 100% !important;
             margin: auto;
             height: auto !important;
-            border-radius: 15px;
+            border-radius: 14px;
         }
 
         #map { 
-            height: 180px; 
-            margin-bottom: 180px !important;
+            height: 210px; 
+            margin-bottom: 0 !important;
+            border-radius: 14px;
         }
-
-        /* .btn-block {
-            width: 100%;
-            display: block;
-        } */
 
         .row {
             margin-left: 0;
@@ -55,33 +51,56 @@
 @endsection
 
 @section('content')
-    <div class="row" style="margin-top: 70px">
-        <div class="col">
-            <input type="hidden" id="lokasi">
-            <div class="webcam-capture">
-                <video></video>
+    <div class="attendify-subpage" style="margin-top: 68px">
+        <div class="card attendify-card mb-2">
+            <div class="card-body attendify-camera-card-body">
+                <div class="attendify-camera-meta">
+                    <div>
+                        <span class="attendify-camera-mode {{ $cek > 0 ? 'attendify-camera-mode--out' : 'attendify-camera-mode--in' }}">
+                            {{ $cek > 0 ? 'Mode Presensi Pulang' : 'Mode Presensi Masuk' }}
+                        </span>
+                        <h4 class="attendify-camera-date">{{ \Carbon\Carbon::parse($hariini)->translatedFormat('l, d F Y') }}</h4>
+                    </div>
+                    <span class="attendify-topbar__pill">
+                        <span class="attendify-topbar__pill-dot"></span>
+                        Kamera &amp; GPS
+                    </span>
+                </div>
+
+                <input type="hidden" id="lokasi">
+                <div class="attendify-webcam-frame">
+                    <div class="webcam-capture">
+                        <video></video>
+                    </div>
+                </div>
+
+                <div class="mt-2">
+                    @if ($cek > 0)
+                    <button id="takeabsen" class="btn btn-primary btn-block attendify-btn-takeabsen attendify-btn-takeabsen--out">
+                        <ion-icon name="camera-outline"></ion-icon>   
+                        Presensi Pulang
+                    </button>
+                    @else
+                    <button id="takeabsen" class="btn btn-primary btn-block attendify-btn-takeabsen">
+                        <ion-icon name="camera-outline"></ion-icon>   
+                        Presensi Masuk
+                    </button>
+                    @endif
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            @if ($cek > 0)
-            <button id="takeabsen" class="btn btn-danger btn-block">
-                <ion-icon name="camera-outline"></ion-icon>   
-                Presensi Pulang
-            </button>
-            @else
-            <button id="takeabsen" class="btn btn-primary btn-block">
-                <ion-icon name="camera-outline"></ion-icon>   
-                Presensi Masuk
-            </button>
-            @endif
 
-        </div>
-    </div>
-    <div class="row mt-2">
-        <div class="col">
-            <div id="map"></div>
+        <div class="card attendify-card attendify-map-card">
+            <div class="card-body">
+                <div class="attendify-map-header">
+                    <div class="attendify-map-title">
+                        <ion-icon name="location-outline"></ion-icon>
+                        <span>Titik Koordinat &amp; Radius Presensi</span>
+                    </div>
+                    <span class="attendify-badge attendify-badge--izin">Radius Maks. {{ $radius_m }}m</span>
+                </div>
+                <div id="map"></div>
+            </div>
         </div>
     </div>
 

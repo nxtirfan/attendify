@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Attendify — Fase 1 UI Stylesheet ("Yurameku" Night Neon Palette)
+   Attendify — Fase 1 UI Stylesheet ("Yurameku" Night Neon Palette + UX Polish)
    Inspired by 25-ji, Nightcord de. — Hoshi wo Sagashite ♭♭
    Palette:
      - Royal Indigo (Primary): #2E3AC7
@@ -37,16 +37,28 @@ html,
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
     color: var(--att-text-main);
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
 
-/* Override MobileKit / Bootstrap primary colors to Royal Indigo (#2E3AC7) */
-.bg-primary {
+/* Override MobileKit / Bootstrap primary & legacy green classes (Zero Green Policy) */
+.bg-primary,
+.bg-success,
+.badge-success {
     background-color: var(--att-indigo) !important;
+    color: var(--att-white) !important;
 }
 
-.text-primary {
+.text-primary,
+.text-success {
     color: var(--att-indigo) !important;
+}
+
+.alert-success {
+    background-color: rgba(46, 58, 199, 0.10) !important;
+    border: 1px solid rgba(90, 216, 230, 0.55) !important;
+    color: var(--att-night) !important;
+    border-radius: 14px !important;
 }
 
 .btn-primary {
@@ -66,6 +78,27 @@ body {
     transform: translateY(-1px);
 }
 
+/* Override Materialize Datepicker teal/green on buatizin page */
+.datepicker-date-display {
+    background: linear-gradient(135deg, var(--att-navy) 0%, var(--att-indigo) 100%) !important;
+}
+.datepicker-table td.is-selected {
+    background-color: var(--att-indigo) !important;
+    color: var(--att-white) !important;
+}
+.datepicker-cancel,
+.datepicker-done,
+.datepicker-table td.is-today {
+    color: var(--att-indigo) !important;
+}
+
+/* Override FAB button on izin page */
+.fab-button .fab {
+    background: linear-gradient(135deg, var(--att-indigo) 0%, var(--att-night) 100%) !important;
+    border: 2px solid var(--att-cyan) !important;
+    box-shadow: 0 8px 22px rgba(46, 58, 199, 0.35) !important;
+}
+
 #loader {
     background-color: var(--att-navy) !important;
 }
@@ -76,7 +109,7 @@ body {
 
 body.attendify-login-body {
     min-height: 100vh;
-    backgroundColor: var(--att-navy);
+    background-color: var(--att-navy) !important;
     background-image:
         radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.75) 0, rgba(255, 255, 255, 0.75) 1.5px, transparent 2.5px),
         radial-gradient(circle at 84% 14%, rgba(90, 216, 230, 0.85) 0, rgba(90, 216, 230, 0.85) 2px, transparent 3.5px),
@@ -129,6 +162,7 @@ body.attendify-login-body #appCapsule {
     color: var(--att-white);
     opacity: 0.88;
     font-size: 0.75rem;
+    line-height: 1.4;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -172,6 +206,7 @@ body.attendify-login-body #appCapsule {
 
 .attendify-login-header h1 {
     font-size: 1.65rem;
+    line-height: 1.25;
     font-weight: 800;
     color: var(--att-navy);
     letter-spacing: -0.02em;
@@ -183,7 +218,7 @@ body.attendify-login-body #appCapsule {
     font-weight: 500;
     color: var(--att-text-muted);
     margin: 0;
-    line-height: 1.45;
+    line-height: 1.5;
 }
 
 .attendify-alert-error {
@@ -197,6 +232,7 @@ body.attendify-login-body #appCapsule {
     padding: 12px 14px !important;
     text-align: left;
     font-size: 0.85rem;
+    line-height: 1.45;
     font-weight: 500;
     box-shadow: 0 4px 12px rgba(190, 18, 60, 0.08);
 }
@@ -216,6 +252,7 @@ body.attendify-login-body #appCapsule {
 .attendify-login-card .form-label-text {
     display: block;
     font-size: 0.78rem;
+    line-height: 1.4;
     font-weight: 600;
     color: var(--att-night);
     margin-bottom: 6px;
@@ -260,27 +297,63 @@ body.attendify-login-body #appCapsule {
 }
 
 /* ==========================================================================
-   2. STUDENT LAYOUT — Topbar Branding, Light Surface (#F4F6FE) & Bottom Nav
+   2. STUDENT LAYOUT — Responsive Mobile Frame, Topbar Branding & Bottom Nav
    ========================================================================== */
 
 body.attendify-student-body {
     background-color: var(--att-bg-light) !important;
     color: var(--att-text-main);
+    min-height: 100vh;
+}
+
+/* On desktop/tablet (>= 576px), frame the student mobile app cleanly at 480px */
+@media (min-width: 576px) {
+    body.attendify-student-body {
+        background:
+            radial-gradient(circle at 15% 20%, rgba(46, 58, 199, 0.06) 0%, transparent 45%),
+            radial-gradient(circle at 85% 80%, rgba(90, 216, 230, 0.08) 0%, transparent 45%),
+            #E8ECF9 !important;
+    }
+
+    .attendify-topbar,
+    body.attendify-student-body > #appCapsule,
+    .appBottomMenu.attendify-bottom-nav,
+    body.attendify-student-body .appHeader {
+        max-width: 480px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    body.attendify-student-body > #appCapsule {
+        min-height: calc(100vh - 56px);
+        box-shadow: 0 0 40px rgba(13, 20, 66, 0.08);
+    }
+
+    .appBottomMenu.attendify-bottom-nav {
+        left: 0 !important;
+        right: 0 !important;
+        border-radius: 20px 20px 0 0;
+    }
 }
 
 .attendify-topbar {
     position: sticky;
     top: 0;
     z-index: 990;
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--att-border-soft);
-    padding: 8px 16px;
+    padding: 10px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 4px 16px rgba(46, 58, 199, 0.06);
+}
+
+/* Hide topbar automatically on subpages that render their own fixed .appHeader */
+.attendify-topbar:has(+ .appHeader) {
+    display: none;
 }
 
 .attendify-topbar__brand {
@@ -294,16 +367,23 @@ body.attendify-student-body {
     width: auto;
 }
 
+.attendify-topbar__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .attendify-topbar__pill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.73rem;
+    font-size: 0.72rem;
+    line-height: 1.3;
     font-weight: 600;
     color: var(--att-indigo);
     background-color: rgba(46, 58, 199, 0.08);
     border: 1px solid rgba(46, 58, 199, 0.14);
-    padding: 4px 10px;
+    padding: 5px 10px;
     border-radius: 999px;
 }
 
@@ -315,9 +395,35 @@ body.attendify-student-body {
     box-shadow: 0 0 6px var(--att-cyan);
 }
 
+.attendify-topbar__logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.73rem;
+    line-height: 1.3;
+    font-weight: 600;
+    color: #9D174D !important;
+    background-color: rgba(247, 168, 216, 0.22);
+    border: 1px solid rgba(247, 168, 216, 0.55);
+    padding: 5px 10px;
+    border-radius: 999px;
+    text-decoration: none !important;
+    transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.attendify-topbar__logout:hover,
+.attendify-topbar__logout:active {
+    background-color: rgba(247, 168, 216, 0.38);
+    transform: translateY(-1px);
+}
+
+.attendify-topbar__logout ion-icon {
+    font-size: 0.95rem;
+}
+
 body.attendify-student-body #appCapsule {
-    padding-top: 8px;
-    padding-bottom: 88px;
+    padding: 0 0 96px 0 !important;
+    background-color: var(--att-bg-light) !important;
 }
 
 /* Bottom Navigation Bar */
@@ -344,7 +450,8 @@ body.attendify-student-body #appCapsule {
     color: var(--att-text-muted) !important;
     font-weight: 600;
     font-size: 0.72rem;
-    margin-top: 2px;
+    line-height: 1.3;
+    margin-top: 3px;
 }
 
 /* Active item in Royal Indigo (#2E3AC7) + thin Neon Cyan (#5AD8E6) indicator bar */
@@ -393,64 +500,97 @@ body.attendify-student-body #appCapsule {
 
 /* ==========================================================================
    3. STUDENT DASHBOARD (dashboardhome.blade.php)
+   Neutralizes legacy absolute positioning & 2px line-heights in style.css
    ========================================================================== */
 
 /* Night-Neon Hero Profile Banner (#user-section) */
+#user-section,
 #user-section.attendify-hero-section {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    height: auto !important;
+    min-height: 156px !important;
     background:
         radial-gradient(circle at 86% 22%, rgba(90, 216, 230, 0.75) 0, rgba(90, 216, 230, 0.75) 2px, transparent 3.5px),
-        radial-gradient(circle at 72% 68%, rgba(255, 201, 77, 0.75) 0, rgba(255, 201, 77, 0.75) 1.8px, transparent 3px),
-        radial-gradient(circle at 24% 20%, rgba(247, 168, 216, 0.70) 0, rgba(247, 168, 216, 0.70) 1.8px, transparent 3px),
+        radial-gradient(circle at 74% 66%, rgba(255, 201, 77, 0.75) 0, rgba(255, 201, 77, 0.75) 1.8px, transparent 3px),
+        radial-gradient(circle at 64% 28%, rgba(247, 168, 216, 0.70) 0, rgba(247, 168, 216, 0.70) 1.8px, transparent 3px),
         radial-gradient(circle at 92% 76%, rgba(255, 255, 255, 0.75) 0, rgba(255, 255, 255, 0.75) 1.5px, transparent 2.5px),
         linear-gradient(135deg, var(--att-navy) 0%, var(--att-night) 52%, var(--att-indigo) 100%) !important;
-    border-radius: 0 0 28px 28px;
-    padding: 24px 20px 64px 20px !important;
-    margin-top: -8px;
-    position: relative;
+    border-radius: 0 0 28px 28px !important;
+    padding: 24px 20px 58px 20px !important;
+    margin: 0 !important;
     overflow: hidden;
     box-shadow: 0 10px 28px rgba(13, 20, 66, 0.22);
 }
 
 #user-detail {
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    margin-top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+}
+
+#user-detail .avatar {
+    flex-shrink: 0;
 }
 
 #user-detail .avatar img.imaged {
+    width: 64px !important;
+    height: 64px !important;
     border: 2.5px solid var(--att-cyan);
     box-shadow: 0 4px 14px rgba(13, 20, 66, 0.45);
     object-fit: cover;
     border-radius: 18px !important;
 }
 
-#user-info #user-name {
+/* Override style.css #user-info { margin-left: 30px !important; line-height: 2px; } */
+#user-section #user-info {
+    margin-left: 0 !important;
+    line-height: 1.45 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+#user-section #user-info #user-name {
     color: var(--att-white) !important;
-    font-size: 1.2rem !important;
+    font-size: 1.22rem !important;
+    line-height: 1.3 !important;
     font-weight: 700 !important;
-    margin: 0 0 4px 0 !important;
+    margin: 0 !important;
     letter-spacing: -0.01em;
 }
 
-#user-info #user-role {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+#user-section #user-info #user-role {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1.3 !important;
     color: var(--att-white) !important;
-    background: rgba(255, 255, 255, 0.14);
-    border: 1px solid rgba(90, 216, 230, 0.45);
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem !important;
-    font-weight: 600;
+    background: rgba(255, 255, 255, 0.16) !important;
+    border: 1px solid rgba(90, 216, 230, 0.55) !important;
+    padding: 4px 12px !important;
+    border-radius: 999px !important;
+    font-size: 0.76rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
 }
 
-/* Primary Quick Action Card & Menu Section */
+/* Override style.css #menu-section { position: absolute; top: 120px; width: 100%; z-index: 999; } */
 #menu-section {
-    margin-top: -42px !important;
-    padding: 0 16px;
-    position: relative;
-    z-index: 5;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    margin-top: -36px !important;
+    margin-bottom: 16px !important;
+    padding: 0 16px !important;
+    z-index: 10 !important;
 }
 
 .attendify-card {
@@ -460,6 +600,11 @@ body.attendify-student-body #appCapsule {
     box-shadow: var(--att-shadow) !important;
 }
 
+#menu-section .attendify-card .card-body {
+    padding: 16px !important;
+}
+
+/* Contextual CTA Presensi Button */
 .attendify-cta-presensi {
     display: flex;
     align-items: center;
@@ -467,18 +612,29 @@ body.attendify-student-body #appCapsule {
     background: linear-gradient(135deg, var(--att-indigo) 0%, var(--att-night) 100%);
     color: var(--att-white) !important;
     border-radius: 14px;
-    padding: 12px 16px;
-    margin-bottom: 14px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
     text-decoration: none !important;
-    border: 1.5px solid rgba(90, 216, 230, 0.42);
+    border: 1.5px solid rgba(90, 216, 230, 0.45);
     box-shadow: 0 6px 18px rgba(46, 58, 199, 0.24);
     transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.attendify-cta-presensi--out {
+    background: linear-gradient(135deg, var(--att-night) 0%, var(--att-navy) 100%);
+    border-color: rgba(255, 201, 77, 0.55);
+}
+
+.attendify-cta-presensi--done {
+    background: linear-gradient(135deg, rgba(46, 58, 199, 0.08) 0%, rgba(90, 216, 230, 0.14) 100%);
+    border: 1.5px solid rgba(46, 58, 199, 0.22);
+    box-shadow: none;
+    color: var(--att-navy) !important;
 }
 
 .attendify-cta-presensi:hover,
 .attendify-cta-presensi:focus,
 .attendify-cta-presensi:active {
-    color: var(--att-white) !important;
     border-color: var(--att-cyan);
     box-shadow: 0 0 0 3px rgba(90, 216, 230, 0.35), 0 8px 22px rgba(46, 58, 199, 0.32);
     transform: translateY(-1px);
@@ -492,8 +648,8 @@ body.attendify-student-body #appCapsule {
 }
 
 .attendify-cta-presensi__icon {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.16);
     display: inline-flex;
@@ -501,42 +657,81 @@ body.attendify-student-body #appCapsule {
     justify-content: center;
     font-size: 1.35rem;
     color: var(--att-cyan);
+    flex-shrink: 0;
+}
+
+.attendify-cta-presensi--out .attendify-cta-presensi__icon {
+    color: var(--att-amber);
+}
+
+.attendify-cta-presensi--done .attendify-cta-presensi__icon {
+    background: rgba(46, 58, 199, 0.12);
+    color: var(--att-indigo);
 }
 
 .attendify-cta-presensi__title {
-    font-size: 0.9rem;
+    font-size: 0.92rem;
+    line-height: 1.35;
     font-weight: 700;
     margin: 0;
     color: var(--att-white);
 }
 
+.attendify-cta-presensi--done .attendify-cta-presensi__title {
+    color: var(--att-navy);
+}
+
 .attendify-cta-presensi__sub {
-    font-size: 0.74rem;
-    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.76rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
     margin: 2px 0 0 0;
+}
+
+.attendify-cta-presensi--done .attendify-cta-presensi__sub {
+    color: var(--att-text-muted);
 }
 
 .attendify-cta-presensi__arrow {
     font-size: 1.2rem;
     color: var(--att-cyan);
+    flex-shrink: 0;
+}
+
+.attendify-cta-presensi--done .attendify-cta-presensi__arrow {
+    color: var(--att-indigo);
 }
 
 /* Quick Menu Icons (Strictly No Green) */
 .list-menu {
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: flex-start !important;
+    padding: 4px 0 0 0 !important;
+    border-top: 1px solid rgba(46, 58, 199, 0.08);
+    padding-top: 14px !important;
+}
+
+.item-menu {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
     align-items: center;
-    padding: 4px 0;
+}
+
+.item-menu--logout {
+    padding-left: 10px;
+    border-left: 1px dashed rgba(46, 58, 199, 0.14);
 }
 
 .item-menu .menu-icon a {
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.55rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.5rem !important;
+    line-height: 1 !important;
     transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
@@ -566,15 +761,31 @@ body.attendify-student-body #appCapsule {
 }
 
 .item-menu .menu-name {
-    font-size: 0.76rem;
-    font-weight: 600;
-    color: var(--att-text-main);
-    margin-top: 6px;
+    font-size: 0.76rem !important;
+    line-height: 1.35 !important;
+    font-weight: 600 !important;
+    color: var(--att-text-main) !important;
+    margin-top: 7px !important;
 }
 
-/* Presence Section */
+/* Override style.css #presence-section { position: absolute; top: 150px; background-color: #e9ecef; } */
 #presence-section {
-    padding: 0 16px;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    margin-top: 0 !important;
+    padding: 0 16px 24px 16px !important;
+}
+
+/* Override style.css .todaypresence { margin-top: 90px; margin-bottom: 20px; } */
+.todaypresence {
+    margin-top: 0 !important;
+    margin-bottom: 18px !important;
 }
 
 /* Check-in & Check-out Photo Cards */
@@ -597,13 +808,15 @@ body.attendify-student-body #appCapsule {
 }
 
 .attendify-presence-card .card-body {
-    padding: 14px !important;
+    padding: 14px 16px !important;
 }
 
+/* Override style.css .presencecontent { justify-content: space-evenly; } */
 .attendify-presence-card .presencecontent {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
 }
 
 .attendify-presence-card .iconpresence {
@@ -636,40 +849,55 @@ body.attendify-student-body #appCapsule {
     color: var(--att-night);
 }
 
+/* Override style.css .presencedetail { line-height: 2px; } */
 .attendify-presence-card .presencedetail {
-    text-align: left;
+    text-align: left !important;
+    line-height: 1.4 !important;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
 }
 
 .attendify-presence-card .presencetitle {
-    font-size: 0.76rem !important;
+    font-size: 0.74rem !important;
+    line-height: 1.3 !important;
     font-weight: 700 !important;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--att-text-muted) !important;
-    margin: 0 0 4px 0 !important;
+    margin: 0 !important;
 }
 
 .attendify-presence-time {
-    display: inline-block;
-    font-size: 0.84rem;
-    font-weight: 700;
-    color: var(--att-navy);
-    background-color: var(--att-bg-light);
-    padding: 3px 9px;
-    border-radius: 8px;
+    display: inline-block !important;
+    font-size: 0.82rem !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: var(--att-navy) !important;
+    background-color: var(--att-bg-light) !important;
+    padding: 4px 10px !important;
+    border-radius: 8px !important;
 }
 
-/* Friendly Empty-State Banner when $presensitoday == null */
+/* Friendly Empty-State Banner when $presensitoday == null or empty lists */
 .attendify-empty-state {
-    background: linear-gradient(135deg, rgba(46, 58, 199, 0.06) 0%, rgba(90, 216, 230, 0.10) 100%);
-    border: 1px dashed rgba(46, 58, 199, 0.25);
+    background: linear-gradient(135deg, rgba(46, 58, 199, 0.06) 0%, rgba(90, 216, 230, 0.12) 100%);
+    border: 1px dashed rgba(46, 58, 199, 0.28);
     border-radius: var(--att-radius);
     padding: 14px 16px;
-    margin-top: 12px;
+    margin-top: 14px;
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+.attendify-empty-state--tab {
+    background: var(--att-white);
+    border: 1px solid var(--att-border-soft);
+    box-shadow: var(--att-shadow);
+    margin-top: 4px;
 }
 
 .attendify-empty-state__svg {
@@ -680,31 +908,35 @@ body.attendify-student-body #appCapsule {
 
 .attendify-empty-state__text {
     text-align: left;
+    line-height: 1.45;
 }
 
 .attendify-empty-state__title {
-    font-size: 0.84rem;
+    font-size: 0.85rem;
+    line-height: 1.35;
     font-weight: 700;
     color: var(--att-navy);
-    margin: 0 0 2px 0;
+    margin: 0 0 3px 0;
 }
 
 .attendify-empty-state__desc {
-    font-size: 0.76rem;
+    font-size: 0.77rem;
+    line-height: 1.4;
     color: var(--att-text-muted);
     margin: 0;
 }
 
 /* Rekap & Status Cards (Hadir = Indigo, Terlambat = Amber, Alpha/Sakit = Pink, Izin = Cyan) */
 .rekappresensi {
-    margin-top: 18px;
+    margin-top: 18px !important;
 }
 
 .rekappresensi h3 {
     font-size: 0.95rem !important;
+    line-height: 1.4 !important;
     font-weight: 700 !important;
     color: var(--att-navy) !important;
-    margin-bottom: 12px !important;
+    margin: 0 0 12px 0 !important;
 }
 
 .attendify-stat-card {
@@ -716,21 +948,22 @@ body.attendify-student-body #appCapsule {
 }
 
 .attendify-stat-card .card-body {
-    padding: 12px 14px !important;
-    display: flex;
-    align-items: center;
+    padding: 14px !important;
+    line-height: 1.35 !important;
+    display: flex !important;
+    align-items: center !important;
     justify-content: flex-start !important;
-    gap: 10px;
+    gap: 12px !important;
 }
 
 .attendify-stat-badge {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     flex-shrink: 0;
 }
 
@@ -758,15 +991,25 @@ body.attendify-student-body #appCapsule {
     color: #9A6700;
 }
 
+.attendify-stat-card .presensidetail {
+    line-height: 1.35 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+}
+
 .attendify-stat-card .presensidetail h4 {
     font-size: 0.76rem !important;
+    line-height: 1.3 !important;
     font-weight: 600 !important;
     color: var(--att-text-muted) !important;
-    margin: 0 0 3px 0 !important;
+    margin: 0 !important;
 }
 
 .attendify-stat-card .presensidetail span {
-    font-size: 0.88rem !important;
+    font-size: 0.9rem !important;
+    line-height: 1.3 !important;
     font-weight: 800 !important;
     color: var(--att-navy) !important;
 }
@@ -784,6 +1027,7 @@ body.attendify-student-body #appCapsule {
     border-radius: 10px;
     font-weight: 600;
     font-size: 0.84rem;
+    line-height: 1.4;
     color: var(--att-text-muted);
     border: none !important;
 }
@@ -805,20 +1049,55 @@ body.attendify-student-body #appCapsule {
     box-shadow: var(--att-shadow);
     border: 1px solid var(--att-border-soft) !important;
     margin-bottom: 10px;
-    padding: 4px 0;
+    padding: 8px 4px;
 }
 
 .attendify-listview.listview.image-listview > li::after {
     display: none !important;
 }
 
+.attendify-history-date {
+    font-size: 0.86rem;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--att-navy);
+}
+
+.attendify-history-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.attendify-rank-pill {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background-color: rgba(46, 58, 199, 0.10);
+    color: var(--att-indigo);
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.attendify-rank-pill--top1 {
+    background-color: rgba(255, 201, 77, 0.28);
+    color: #92400E;
+}
+
 /* Status Light Badges (Strictly NO Green) */
 .attendify-badge {
     display: inline-flex;
     align-items: center;
-    padding: 4px 9px;
+    padding: 4px 10px;
     border-radius: 999px;
     font-size: 0.72rem;
+    line-height: 1.3;
     font-weight: 700;
     letter-spacing: 0.01em;
 }
@@ -856,4 +1135,296 @@ body.attendify-student-body #appCapsule {
     background-color: rgba(30, 42, 120, 0.10) !important;
     color: var(--att-night) !important;
     border: 1px solid rgba(30, 42, 120, 0.20);
+}
+
+
+/* ==========================================================================
+   4. STUDENT SUBPAGES — FASE 2 (create, histori, gethistori, izin, buatizin, editprofile)
+   ========================================================================== */
+
+.appHeader.attendify-subheader {
+    background: linear-gradient(135deg, var(--att-navy) 0%, var(--att-night) 52%, var(--att-indigo) 100%) !important;
+    border-bottom: 1px solid rgba(90, 216, 230, 0.28) !important;
+    box-shadow: 0 6px 20px rgba(13, 20, 66, 0.22) !important;
+}
+
+.appHeader.attendify-subheader .pageTitle {
+    font-weight: 700 !important;
+    letter-spacing: -0.01em;
+    color: var(--att-white) !important;
+}
+
+.appHeader.attendify-subheader .headerButton {
+    color: var(--att-white) !important;
+}
+
+.attendify-subpage {
+    padding: 0 16px 32px 16px;
+}
+
+/* Section Headers & Form Controls */
+.attendify-section-head {
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.attendify-section-title {
+    font-size: 0.96rem !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: var(--att-navy) !important;
+    margin: 0 0 4px 0 !important;
+}
+
+.attendify-section-sub {
+    font-size: 0.78rem !important;
+    line-height: 1.45 !important;
+    color: var(--att-text-muted) !important;
+    margin: 0 !important;
+}
+
+.attendify-field-label {
+    display: block;
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+    font-weight: 600 !important;
+    color: var(--att-night) !important;
+    margin-bottom: 6px !important;
+    text-align: left;
+}
+
+/* Neutralize Materialize CSS input/select/textarea overrides on buatizin */
+.attendify-input,
+.attendify-form-clean input[type="text"].form-control,
+.attendify-form-clean select.form-control,
+.attendify-Subpage select.form-control {
+    background-color: var(--att-bg-light) !important;
+    border: 1.5px solid rgba(46, 58, 199, 0.16) !important;
+    border-radius: 12px !important;
+    height: 46px !important;
+    padding: 0 14px !important;
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+    color: var(--att-navy) !important;
+    font-weight: 500 !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.attendify-textarea,
+.attendify-form-clean textarea.form-control {
+    background-color: var(--att-bg-light) !important;
+    border: 1.5px solid rgba(46, 58, 199, 0.16) !important;
+    border-radius: 12px !important;
+    min-height: 110px !important;
+    padding: 12px 14px !important;
+    font-size: 0.9rem !important;
+    line-height: 1.45 !important;
+    color: var(--att-navy) !important;
+    font-weight: 500 !important;
+    box-sizing: border-box !important;
+    box-shadow: none !important;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.attendify-input:focus,
+.attendify-textarea:focus,
+.attendify-form-clean input[type="text"].form-control:focus,
+.attendify-form-clean select.form-control:focus,
+.attendify-form-clean textarea.form-control:focus {
+    background-color: var(--att-white) !important;
+    border-color: var(--att-indigo) !important;
+    box-shadow: 0 0 0 3px rgba(90, 216, 230, 0.28) !important;
+    outline: none !important;
+}
+
+.attendify-btn-action,
+.attendify-btn-takeabsen {
+    height: 48px !important;
+    border-radius: 14px !important;
+    font-size: 0.92rem !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    text-transform: none !important;
+}
+
+.attendify-btn-takeabsen--out {
+    background: linear-gradient(135deg, var(--att-night) 0%, var(--att-navy) 100%) !important;
+    border: 1.5px solid var(--att-amber) !important;
+}
+
+/* Camera & Map Page (create.blade.php) */
+.attendify-camera-card-body {
+    padding: 16px !important;
+}
+
+.attendify-camera-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.attendify-camera-mode {
+    display: inline-block;
+    font-size: 0.72rem;
+    line-height: 1.3;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    margin-bottom: 4px;
+}
+
+.attendify-camera-mode--in {
+    background-color: rgba(46, 58, 199, 0.12);
+    color: var(--att-indigo);
+}
+
+.attendify-camera-mode--out {
+    background-color: rgba(255, 201, 77, 0.24);
+    color: #92400E;
+}
+
+.attendify-camera-date {
+    font-size: 0.92rem !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: var(--att-navy) !important;
+    margin: 0 !important;
+}
+
+.attendify-webcam-frame {
+    background: linear-gradient(145deg, var(--att-navy) 0%, var(--att-night) 100%);
+    padding: 6px;
+    border-radius: 18px;
+    border: 1.5px solid rgba(90, 216, 230, 0.55);
+    box-shadow: 0 8px 24px rgba(13, 20, 66, 0.20);
+    overflow: hidden;
+}
+
+.attendify-map-card .card-body {
+    padding: 14px 16px !important;
+}
+
+.attendify-map-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.attendify-map-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.84rem;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--att-navy);
+}
+
+.attendify-map-title ion-icon {
+    font-size: 1.15rem;
+    color: var(--att-indigo);
+}
+
+/* History Thumbnail & Alerts (gethistori & izin) */
+.attendify-history-thumb {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 12px !important;
+    object-fit: cover;
+    border: 1.5px solid rgba(46, 58, 199, 0.18);
+    margin-right: 12px;
+}
+
+.attendify-alert-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background-color: rgba(90, 216, 230, 0.16) !important;
+    border: 1px solid rgba(90, 216, 230, 0.55) !important;
+    color: var(--att-navy) !important;
+    border-radius: 14px !important;
+    padding: 12px 14px !important;
+    text-align: left;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    font-weight: 600;
+}
+
+.attendify-alert-info ion-icon {
+    font-size: 1.25rem;
+    color: var(--att-indigo);
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+/* Profile Page (editprofile.blade.php) */
+.attendify-profile-banner {
+    background: linear-gradient(135deg, rgba(46, 58, 199, 0.06) 0%, rgba(90, 216, 230, 0.12) 100%) !important;
+}
+
+.attendify-profile-banner .card-body {
+    padding: 16px !important;
+    gap: 14px !important;
+}
+
+.attendify-profile-avatar img.imaged {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 16px !important;
+    object-fit: cover;
+    border: 2px solid var(--att-indigo);
+}
+
+.attendify-profile-meta {
+    text-align: left;
+}
+
+.attendify-profile-name {
+    font-size: 1rem !important;
+    line-height: 1.35 !important;
+    font-weight: 700 !important;
+    color: var(--att-navy) !important;
+    margin: 0 0 6px 0 !important;
+}
+
+.attendify-profile-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.custom-file-upload.attendify-upload-box label {
+    background-color: var(--att-bg-light) !important;
+    border: 1.5px dashed rgba(46, 58, 199, 0.32) !important;
+    border-radius: 14px !important;
+    transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.custom-file-upload.attendify-upload-box label:hover {
+    border-color: var(--att-indigo) !important;
+    background-color: rgba(46, 58, 199, 0.04) !important;
+}
+
+.custom-file-upload.attendify-upload-box label span strong {
+    color: var(--att-indigo) !important;
+    font-size: 0.84rem !important;
+    font-weight: 600 !important;
+}
+
+.custom-file-upload.attendify-upload-box label span ion-icon {
+    color: var(--att-indigo) !important;
 }

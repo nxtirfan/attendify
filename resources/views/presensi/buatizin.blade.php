@@ -4,13 +4,14 @@
     <style>
     .datepicker-modal {
         max-height: 430px !important;
+        border-radius: 16px !important;
     }
     .datepicker-date-display {
-        background-color:rgb(42, 122, 252)  !important;
+        background: linear-gradient(135deg, #0D1442 0%, #2E3AC7 100%) !important;
     }
     </style>
     <!-- App Header -->
-    <div class="appHeader bg-primary text-light">
+    <div class="appHeader bg-primary text-light attendify-subheader">
         <div class="left">
             <a href="javascript:;" class="headerButton goBack">
                 <ion-icon name="chevron-back-outline"></ion-icon>
@@ -23,32 +24,44 @@
 @endsection
 
 @section('content')
-    <div class="row" style="margin-top: 70px">
-        <div class="col">
-            <form method="POST" action="/presensi/storeizin" id="frmizin">
-                @csrf
-                <div class="form-group">
-                    <input type="text" id="tgl_izin" name="tgl_izin" class="form-control datepicker" placeholder="Tanggal">
+    <div class="attendify-subpage" style="margin-top: 68px">
+        <div class="card attendify-card">
+            <div class="card-body">
+                <div class="attendify-section-head">
+                    <h4 class="attendify-section-title">Pengajuan Izin / Sakit</h4>
+                    <p class="attendify-section-sub">Lengkapi tanggal, status ketidakhadiran, dan alasan pengajuan dengan jelas.</p>
                 </div>
 
-                <div class="form-group">
-                    <select name="status" id="status" class="form-control">
-                        <option value="" disabled selected>Pilih Status</option>
-                        <option value="izin">Izin</option>
-                        <option value="sakit">Sakit</option>
-                    </select>
-                </div>
+                <form method="POST" action="/presensi/storeizin" id="frmizin" class="attendify-form-clean">
+                    @csrf
+                    <div class="form-group mb-2">
+                        <label class="attendify-field-label" for="tgl_izin">Tanggal Izin / Sakit</label>
+                        <input type="text" id="tgl_izin" name="tgl_izin" class="form-control datepicker attendify-input" placeholder="Pilih Tanggal (TTTT-BB-HH)">
+                    </div>
 
-                <div class="form-group">
-                    <textarea name="keterangan" id="keterangan" class="form-control" rows="5"
-                        placeholder="Keterangan"></textarea>
-                </div>
+                    <div class="form-group mb-2">
+                        <label class="attendify-field-label" for="status">Jenis Pengajuan</label>
+                        <select name="status" id="status" class="form-control browser-default attendify-input">
+                            <option value="" disabled selected>Pilih Status (Izin / Sakit)</option>
+                            <option value="izin">Izin</option>
+                            <option value="sakit">Sakit</option>
+                        </select>
+                    </div>
 
-                <div class="form-group">
-                    <button class="btn btn-primary w-100">Kirim</button>
-                </div>
-                
-            </form>
+                    <div class="form-group mb-3">
+                        <label class="attendify-field-label" for="keterangan">Keterangan / Alasan</label>
+                        <textarea name="keterangan" id="keterangan" class="form-control attendify-textarea" rows="5"
+                            placeholder="Tuliskan alasan izin atau sakit secara singkat..."></textarea>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <button class="btn btn-primary w-100 attendify-btn-action">
+                            <ion-icon name="paper-plane-outline"></ion-icon> Kirim Pengajuan
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
         </div>
     </div>
 @endsection
