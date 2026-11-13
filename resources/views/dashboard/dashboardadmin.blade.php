@@ -51,12 +51,12 @@
                 </div> --}}
 
                 <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
+                    <div class="card card-sm attendify-stat-card-admin attendify-stat-card-admin--hadir">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span
-                                        class="bg-success text-white avatar"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
+                                        class="avatar attendify-avatar--hadir"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round"
@@ -79,12 +79,12 @@
                 </div>
 
                 <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
+                    <div class="card card-sm attendify-stat-card-admin attendify-stat-card-admin--izin">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span
-                                        class="bg-info text-white avatar"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
+                                        class="avatar attendify-avatar--izin"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round"
@@ -108,12 +108,12 @@
                 </div>
 
                 <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
+                    <div class="card card-sm attendify-stat-card-admin attendify-stat-card-admin--sakit">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span
-                                        class="bg-warning text-white avatar"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
+                                        class="avatar attendify-avatar--sakit"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round"
@@ -135,12 +135,12 @@
                 </div>
 
                 <div class="col-sm-6 col-lg-3">
-                    <div class="card card-sm">
+                    <div class="card card-sm attendify-stat-card-admin attendify-stat-card-admin--terlambat">
                         <div class="card-body">
                             <div class="row align-items-center">
                                 <div class="col-auto">
                                     <span
-                                        class="bg-danger text-white avatar"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
+                                        class="avatar attendify-avatar--terlambat"><!-- Download SVG icon from http://tabler.io/icons/icon/currency-dollar -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round"

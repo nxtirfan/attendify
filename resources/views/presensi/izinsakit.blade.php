@@ -4,8 +4,7 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <!-- Page pre-title -->
-
+                    <div class="page-pretitle">Persetujuan Kehadiran</div>
                     <h2 class="page-title">Data Izin / Sakit</h2>
                 </div>
             </div>
@@ -14,6 +13,8 @@
 
     <div class="page-body">
         <div class="container-xl">
+            <div class="card">
+                <div class="card-body">
             <div class="col-12">
                 <form action="/izinsakit" method="GET" autocomplete="off">
                     <div class="row">
@@ -80,7 +81,8 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <table class="table table-bordered">
+                    <div class="table-responsive">
+                    <table class="table table-bordered table-vcenter table-hover">
                         <thead>
                             <tr>
                                 <th>No.</th>
@@ -106,11 +108,11 @@
                                     <td>{{ $d->keterangan }}</td>
                                     <td>
                                         @if ($d->status_approved == "disetujui")
-                                            <span class="badge bg-success">Disetujui</span>
+                                            <span class="badge bg-primary attendify-badge-disetujui">Disetujui</span>
                                         @elseif ($d->status_approved == "ditolak")
-                                            <span class="badge bg-danger">Ditolak</span>
+                                            <span class="badge bg-danger attendify-badge-ditolak">Ditolak</span>
                                         @else
-                                            <span class="badge bg-warning">Pending</span>
+                                            <span class="badge bg-warning attendify-badge-pending">Menunggu</span>
                                         @endif
                                     </td>
                                     <td>
@@ -142,7 +144,12 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $izinsakit->links('vendor.pagination.bootstrap-5') }}
+                    </div>
+                    <div class="mt-3">
+                        {{ $izinsakit->links('vendor.pagination.bootstrap-5') }}
+                    </div>
+                </div>
+            </div>
                 </div>
             </div>
         </div>
@@ -173,7 +180,7 @@
                                 <div class="form-group">
                                     <button class="btn btn-primary w-100" type="submit">
                                         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-send"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14l11 -11" /><path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" /></svg>
-                                        Submit
+                                        Simpan Persetujuan
                                     </button>
                                 </div>
                             </div>

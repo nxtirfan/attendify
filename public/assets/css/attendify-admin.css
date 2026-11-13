@@ -1,0 +1,479 @@
+/*!
+ * Attendify Admin & Guru UI Theme — Fase 3 (Tabler Desktop Override)
+ * Palet "Yurameku" (Night Neon — Inspired by 25-ji, Nightcord de.)
+ * Primer Indigo Royal: #2E3AC7 | Night Blue: #1E2A78 | Deep Navy: #0D1442
+ * Aksen Neon: Cyan #5AD8E6 | Pink #F7A8D8 | Amber #FFC94D
+ * Permukaan Terang: #F4F6FE | Tanpa Hijau/Emerald
+ */
+
+:root,
+body,
+[data-bs-theme="light"] {
+  --tblr-primary: #2E3AC7;
+  --tblr-primary-rgb: 46, 58, 199;
+  --tblr-primary-fg: #FFFFFF;
+  --tblr-primary-darken: #1E2A78;
+  --tblr-primary-lt: #EEF0FE;
+  --tblr-primary-lt-rgb: 238, 240, 254;
+  --tblr-body-bg: #F4F6FE;
+  --tblr-body-bg-rgb: 244, 246, 254;
+  --tblr-body-color: #161B3D;
+  --tblr-muted: #646B96;
+  --tblr-card-bg: #FFFFFF;
+  --tblr-card-border-color: rgba(46, 58, 199, .12);
+  --tblr-border-color: rgba(46, 58, 199, .12);
+  --tblr-link-color: #2E3AC7;
+  --tblr-link-hover-color: #1E2A78;
+  /* Override Tabler semantic colors to eliminate green/emerald */
+  --tblr-success: #2E3AC7;
+  --tblr-success-rgb: 46, 58, 199;
+  --tblr-success-lt: #EEF0FE;
+  --tblr-green: #2E3AC7;
+  --tblr-green-rgb: 46, 58, 199;
+  --tblr-azure: #1E2A78;
+  --tblr-azure-rgb: 30, 42, 120;
+  --tblr-info: #5AD8E6;
+  --tblr-info-rgb: 90, 216, 230;
+  --tblr-warning: #FFC94D;
+  --tblr-warning-rgb: 255, 201, 77;
+  --tblr-danger: #E11D48;
+  --tblr-danger-rgb: 225, 29, 72;
+  --attendify-indigo: #2E3AC7;
+  --attendify-night: #1E2A78;
+  --attendify-navy: #0D1442;
+  --attendify-cyan: #5AD8E6;
+  --attendify-pink: #F7A8D8;
+  --attendify-amber: #FFC94D;
+  --attendify-surface: #F4F6FE;
+}
+
+body {
+  background-color: var(--tblr-body-bg) !important;
+  color: var(--tblr-body-color);
+}
+
+.page-wrapper {
+  background-color: var(--tblr-body-bg);
+}
+
+/* ==========================================================================
+   1. SIDEBAR (ADMIN & GURU) — Gradasi Navy #0D1442 -> Indigo #1E2A78
+   ========================================================================== */
+.navbar-vertical.navbar-expand-lg.navbar-dark,
+aside.navbar-vertical.navbar-dark {
+  background: linear-gradient(180deg, #0D1442 0%, #1E2A78 100%) !important;
+  border-right: 1px solid rgba(90, 216, 230, 0.16) !important;
+  box-shadow: 4px 0 24px rgba(13, 20, 66, 0.18);
+}
+
+.navbar-vertical .navbar-brand {
+  padding: 1.15rem 1rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.35rem;
+}
+
+.navbar-vertical .navbar-brand-image {
+  height: 36px;
+  width: auto;
+  max-width: 148px;
+  filter: drop-shadow(0 2px 10px rgba(90, 216, 230, 0.22));
+}
+
+.navbar-vertical .navbar-nav .nav-item {
+  margin: 2px 0.55rem;
+}
+
+.navbar-vertical .navbar-nav .nav-link {
+  border-radius: 10px;
+  padding: 0.58rem 0.85rem;
+  color: rgba(244, 246, 254, 0.82) !important;
+  font-weight: 500;
+  transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.navbar-vertical .navbar-nav .nav-link .nav-link-icon {
+  color: rgba(90, 216, 230, 0.78) !important;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.navbar-vertical .navbar-nav .nav-link:hover,
+.navbar-vertical .navbar-nav .nav-link:focus {
+  background-color: rgba(90, 216, 230, 0.12) !important;
+  color: #FFFFFF !important;
+}
+
+.navbar-vertical .navbar-nav .nav-link:hover .nav-link-icon {
+  color: #5AD8E6 !important;
+}
+
+.navbar-vertical .navbar-nav .nav-item.active > .nav-link,
+.navbar-vertical .navbar-nav .nav-link.active {
+  background: linear-gradient(90deg, rgba(46, 58, 199, 0.92) 0%, rgba(46, 58, 199, 0.58) 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 #5AD8E6, 0 4px 14px rgba(13, 20, 66, 0.28);
+}
+
+.navbar-vertical .navbar-nav .nav-item.active > .nav-link .nav-link-icon,
+.navbar-vertical .navbar-nav .nav-link.active .nav-link-icon {
+  color: #5AD8E6 !important;
+}
+
+.navbar-vertical.navbar-dark .dropdown-menu {
+  background-color: rgba(13, 20, 66, 0.55) !important;
+  border-radius: 10px;
+  margin: 0.2rem 0.25rem 0.35rem 0.75rem;
+  padding: 0.3rem 0;
+  border-left: 2px solid rgba(90, 216, 230, 0.32) !important;
+}
+
+.navbar-vertical.navbar-dark .dropdown-menu .dropdown-item {
+  color: rgba(244, 246, 254, 0.78) !important;
+  padding: 0.42rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.navbar-vertical.navbar-dark .dropdown-menu .dropdown-item:hover,
+.navbar-vertical.navbar-dark .dropdown-menu .dropdown-item.active {
+  background-color: rgba(90, 216, 230, 0.14) !important;
+  color: #5AD8E6 !important;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   2. HEADER / TOPBAR & PAGE HEADER
+   ========================================================================== */
+header.navbar.navbar-light {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(46, 58, 199, 0.10) !important;
+  box-shadow: 0 2px 12px rgba(46, 58, 199, 0.04);
+}
+
+.attendify-admin-avatar {
+  background: linear-gradient(135deg, #2E3AC7 0%, #1E2A78 100%) !important;
+  color: #5AD8E6 !important;
+  font-weight: 700;
+  border: 1.5px solid rgba(90, 216, 230, 0.45);
+  box-shadow: 0 2px 8px rgba(46, 58, 199, 0.22);
+}
+
+.attendify-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #2E3AC7;
+  background-color: #EEF0FE;
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.page-header {
+  margin-top: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-pretitle {
+  color: #2E3AC7 !important;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.page-title {
+  color: #0D1442 !important;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+/* ==========================================================================
+   3. CARDS & STATISTIK (DASHBOARD ADMIN & GURU)
+   ========================================================================== */
+.card {
+  border-radius: 16px !important;
+  border: 1px solid rgba(46, 58, 199, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(46, 58, 199, 0.08) !important;
+  background-color: #FFFFFF;
+}
+
+.card-header {
+  border-bottom: 1px solid rgba(46, 58, 199, 0.10);
+  padding: 1rem 1.25rem;
+}
+
+.attendify-stat-card-admin {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.attendify-stat-card-admin:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(46, 58, 199, 0.14) !important;
+}
+
+.attendify-stat-card-admin::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #2E3AC7;
+}
+
+.attendify-stat-card-admin--siswa::before {
+  background: linear-gradient(180deg, #1E2A78 0%, #2E3AC7 100%);
+}
+
+.attendify-stat-card-admin--hadir::before {
+  background: linear-gradient(180deg, #2E3AC7 0%, #5AD8E6 100%);
+}
+
+.attendify-stat-card-admin--izin::before {
+  background: #5AD8E6;
+}
+
+.attendify-stat-card-admin--sakit::before {
+  background: #F7A8D8;
+}
+
+.attendify-stat-card-admin--terlambat::before {
+  background: #FFC94D;
+}
+
+.avatar.attendify-avatar--siswa {
+  background-color: rgba(30, 42, 120, 0.12) !important;
+  color: #1E2A78 !important;
+}
+
+.avatar.attendify-avatar--hadir {
+  background-color: rgba(46, 58, 199, 0.14) !important;
+  color: #2E3AC7 !important;
+}
+
+.avatar.attendify-avatar--izin {
+  background-color: rgba(90, 216, 230, 0.22) !important;
+  color: #0E7490 !important;
+}
+
+.avatar.attendify-avatar--sakit {
+  background-color: rgba(247, 168, 216, 0.26) !important;
+  color: #9D174D !important;
+}
+
+.avatar.attendify-avatar--terlambat {
+  background-color: rgba(255, 201, 77, 0.26) !important;
+  color: #92400E !important;
+}
+
+/* ==========================================================================
+   4. BUTTONS, FORMS & INPUTS
+   ========================================================================== */
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+.btn-primary {
+  background-color: #2E3AC7 !important;
+  border-color: #2E3AC7 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(46, 58, 199, 0.22);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #1E2A78 !important;
+  border-color: #5AD8E6 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 0 0 3px rgba(90, 216, 230, 0.28), 0 6px 16px rgba(46, 58, 199, 0.28) !important;
+}
+
+/* Override any remaining btn-success or export button to Yurameku night-cyan */
+.btn-success,
+.attendify-btn-export {
+  background-color: #1E2A78 !important;
+  border-color: rgba(90, 216, 230, 0.45) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(30, 42, 120, 0.18);
+}
+
+.btn-success:hover,
+.attendify-btn-export:hover,
+.btn-success:focus,
+.attendify-btn-export:focus {
+  background-color: #0D1442 !important;
+  border-color: #5AD8E6 !important;
+  color: #5AD8E6 !important;
+  box-shadow: 0 0 0 3px rgba(90, 216, 230, 0.26) !important;
+}
+
+.btn-danger {
+  background-color: #E11D48 !important;
+  border-color: #E11D48 !important;
+  color: #FFFFFF !important;
+}
+
+.btn-danger:hover {
+  background-color: #BE123C !important;
+  border-color: #F7A8D8 !important;
+}
+
+.form-control,
+.form-select {
+  border-radius: 10px !important;
+  border: 1px solid rgba(46, 58, 199, 0.18);
+  padding: 0.52rem 0.85rem;
+  color: #161B3D;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #2E3AC7 !important;
+  box-shadow: 0 0 0 3px rgba(90, 216, 230, 0.25) !important;
+}
+
+.input-icon .form-control {
+  padding-left: 2.5rem;
+}
+
+.input-icon-addon {
+  color: #2E3AC7;
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 0.82rem;
+  color: #1E2A78;
+  margin-bottom: 0.35rem;
+}
+
+/* ==========================================================================
+   5. TABLES, BADGES & ALERTS (TANPA HIJAU)
+   ========================================================================== */
+.table {
+  border-color: rgba(46, 58, 199, 0.12);
+}
+
+.table thead th {
+  background-color: #EEF0FE !important;
+  color: #1E2A78 !important;
+  font-weight: 700 !important;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid rgba(46, 58, 199, 0.18) !important;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  color: #161B3D;
+}
+
+.table-hover tbody tr:hover > *,
+.table tbody tr:hover > * {
+  background-color: rgba(46, 58, 199, 0.04) !important;
+}
+
+/* Status Badges — Palet Yurameku (Tanpa Hijau) */
+.badge {
+  border-radius: 8px;
+  padding: 0.32em 0.68em;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.badge.bg-success,
+.badge.attendify-badge-hadir,
+.badge.attendify-badge-disetujui {
+  background-color: rgba(46, 58, 199, 0.14) !important;
+  color: #2E3AC7 !important;
+  border: 1px solid rgba(46, 58, 199, 0.30);
+}
+
+.badge.bg-warning,
+.badge.attendify-badge-pending,
+.badge.attendify-badge-terlambat {
+  background-color: rgba(255, 201, 77, 0.24) !important;
+  color: #92400E !important;
+  border: 1px solid rgba(255, 201, 77, 0.50);
+}
+
+.badge.bg-info,
+.badge.attendify-badge-izin {
+  background-color: rgba(90, 216, 230, 0.22) !important;
+  color: #0E7490 !important;
+  border: 1px solid rgba(90, 216, 230, 0.48);
+}
+
+.badge.bg-primary.attendify-badge-sakit {
+  background-color: rgba(247, 168, 216, 0.28) !important;
+  color: #9D174D !important;
+  border: 1px solid rgba(247, 168, 216, 0.55);
+}
+
+.badge.bg-danger,
+.badge.attendify-badge-ditolak,
+.badge.attendify-badge-alpha {
+  background-color: rgba(225, 29, 72, 0.12) !important;
+  color: #BE123C !important;
+  border: 1px solid rgba(225, 29, 72, 0.28);
+}
+
+.alert-success {
+  background-color: #EEF0FE !important;
+  border-color: rgba(46, 58, 199, 0.28) !important;
+  color: #1E2A78 !important;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.alert-warning {
+  background-color: rgba(255, 201, 77, 0.18) !important;
+  border-color: rgba(255, 201, 77, 0.48) !important;
+  color: #92400E !important;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   6. MODALS, LEAFLET MAP & FOOTER
+   ========================================================================== */
+.modal-content {
+  border-radius: 16px !important;
+  border: 1px solid rgba(46, 58, 199, 0.16);
+  box-shadow: 0 16px 40px rgba(13, 20, 66, 0.22);
+}
+
+.modal-header {
+  background-color: #F4F6FE;
+  border-bottom: 1px solid rgba(46, 58, 199, 0.12);
+  border-radius: 16px 16px 0 0 !important;
+}
+
+.modal-title {
+  color: #0D1442;
+  font-weight: 700;
+}
+
+#map {
+  border-radius: 12px;
+  border: 1px solid rgba(46, 58, 199, 0.18);
+  box-shadow: 0 4px 16px rgba(46, 58, 199, 0.08);
+}
+
+footer.footer {
+  border-top: 1px solid rgba(46, 58, 199, 0.10);
+  color: #646B96;
+  padding: 1.1rem 0;
+}

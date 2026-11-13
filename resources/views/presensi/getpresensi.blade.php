@@ -29,7 +29,7 @@
         <td>{{ $d->nama_angkatan }}</td>
         <td>{{ $d->jam_in }}</td>
         <td><img src="{{ $foto_in }}" class="avatar" alt="Foto Masuk"></td>
-        <td>{!! $d->jam_out != null ? $d->jam_out : '<span class="badge bg-danger">Belum Absen</span>' !!}</td>
+        <td>{!! $d->jam_out != null ? $d->jam_out : '<span class="badge bg-danger attendify-badge-alpha">Belum Absen</span>' !!}</td>
         <td>
             @if ($d->jam_out != null)
                 <img src="{{ $foto_out }}" class="avatar" alt="Foto Keluar">
@@ -39,18 +39,18 @@
         </td>
         <td>
             @if ($d->status == 'hadir')
-                <span class="badge bg-success">Tepat Waktu</span>
+                <span class="badge bg-primary attendify-badge-hadir">Tepat Waktu</span>
             @elseif ($d->jam_in >= '07:00' && $d->status == 'terlambat')
                 @php
                     $jamterlambat = selisih('07:00:00', $d->jam_in);
                 @endphp
-                <span class="badge bg-danger">Terlambat {{ $jamterlambat}}</span>
+                <span class="badge bg-warning attendify-badge-terlambat">Terlambat {{ $jamterlambat}}</span>
             @elseif ($d->status == 'izin')
-                <span class="badge bg-info text-dark">Izin</span>
+                <span class="badge bg-info attendify-badge-izin">Izin</span>
             @elseif ($d->status == 'sakit')
-                <span class="badge bg-primary">Sakit</span>
+                <span class="badge bg-primary attendify-badge-sakit">Sakit</span>
             @elseif ($d->status == 'alpha')
-                <span class="badge bg-warning text-dark">Alpha</span>
+                <span class="badge bg-danger attendify-badge-alpha">Alpha</span>
             @else
                 <span class="badge bg-secondary">Tidak Diketahui</span>
             @endif
@@ -63,10 +63,10 @@
                     <span class="badge bg-warning text-dark">Terlambat</span>
                     @break
                 @case('izin')
-                    <span class="badge bg-info text-dark">Izin</span>
+                    <span class="badge bg-info attendify-badge-izin">Izin</span>
                     @break
                 @case('sakit')
-                    <span class="badge bg-primary">Sakit</span>
+                    <span class="badge bg-primary attendify-badge-sakit">Sakit</span>
                     @break
                 @case('alpha')
                     <span class="badge bg-danger">Alpha</span>

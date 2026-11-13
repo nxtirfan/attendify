@@ -2,6 +2,7 @@
     @csrf
     <div class="row">
         <div class="col-12">
+            <label class="form-label">Data Siswa</label>
             <div class="input-icon mb-3">
                 <span class="input-icon-addon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -79,6 +80,7 @@
     <div class="row">
         <div class="col-12">
             <div class="mt-2">
+                <label class="form-label" for="foto">Foto Profil Siswa</label>
                 <input type="file" id="foto" class="form-control" name="foto">
 
             </div>
@@ -87,6 +89,7 @@
 
     <div class="row mt-2">
         <div class="col-12">
+            <label class="form-label" for="angkatan_id">Angkatan</label>
             <select name="angkatan_id" id="angkatan_id" class="form-select">
                 <option value="">Pilih Angkatan</option>
                 @foreach ($angkatan as $d)

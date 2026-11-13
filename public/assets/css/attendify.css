@@ -1474,3 +1474,44 @@ body.attendify-student-body #appCapsule {
     border-radius: 12px;
 }
 
+
+/* ==========================================================================
+   10. PERBAIKAN SIMETRI GRID 2x2 REKAP PRESENSI & CTA PRESENSI (QA REVISION)
+   ========================================================================== */
+
+/* Pastikan 2 kartu Masuk/Pulang dan 4 kartu Rekap Presensi (2x2) memiliki
+   jarak horizontal dan vertikal yang 100% simetris (12px) di semua ukuran layar */
+#presence-section .todaypresence > .row,
+#presence-section .rekappresensi > .row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+#presence-section .todaypresence > .row > [class*="col-"],
+#presence-section .rekappresensi > .row > [class*="col-"] {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin: 0 !important;
+}
+
+/* Sembunyikan spacer .w-100 di dalam grid .rekappresensi agar tidak merusak grid 2x2 */
+#presence-section .rekappresensi > .row > .w-100 {
+  display: none !important;
+}
+
+#presence-section .todaypresence .card.attendify-presence-card,
+#presence-section .rekappresensi .card.attendify-stat-card {
+  margin: 0 !important;
+  height: 100% !important;
+}
+
+/* Sembunyikan kartu CTA apabila sudah selesai presensi masuk & pulang */
+.attendify-cta-presensi--done {
+  display: none !important;
+}

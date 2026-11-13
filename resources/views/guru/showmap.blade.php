@@ -1,6 +1,8 @@
 <style>
     #map {
         height: 400px;
+        border-radius: 12px;
+        border: 1px solid rgba(46, 58, 199, 0.16);
     }
 </style>
 <div id="map"></div>

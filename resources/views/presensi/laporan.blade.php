@@ -4,8 +4,7 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <!-- Page pre-title -->
-
+                    <div class="page-pretitle">Dokumen Kehadiran</div>
                     <h2 class="page-title">Laporan Presensi</h2>
                 </div>
             </div>
@@ -23,6 +22,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group">
+                                            <label class="form-label" for="bulan">Pilih Bulan</label>
                                             <select name="bulan" id="bulan" class="form-select">
                                                 <option value="">Bulan</option>
                                                 @for ($i=1; $i<=12; $i++ ) 
@@ -35,6 +35,7 @@
                                 <div class="row mt-2">
                                     <div class="col-12">
                                         <div class="form-group">
+                                            <label class="form-label" for="tahun">Pilih Tahun</label>
                                             <select name="tahun" id="tahun" class="form-select">
                                                 <option value="">Tahun</option>
                                                 @php
@@ -51,6 +52,7 @@
                                 <div class="row mt-2">
                                     <div class="col-12">
                                         <div class="form-group">
+                                            <label class="form-label" for="nis">Pilih Siswa</label>
                                             <select name="nis" id="nis" class="form-select">
                                                 <option value="">Pilih Siswa</option>
                                                 @foreach ($siswa as $d)
@@ -81,7 +83,7 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <button type="submit" name="exportexcel" class="btn btn-success w-100">
+                                            <button type="submit" name="exportexcel" class="btn attendify-btn-export w-100">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                     stroke-linecap="round" stroke-linejoin="round"
@@ -91,7 +93,7 @@
                                                     <path d="M7 11l5 5l5 -5" />
                                                     <path d="M12 4l0 12" />
                                                 </svg>
-                                                Export to Excel
+                                                Ekspor Excel
                                             </button>
                                         </div>
                                     </div>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>A4</title>
+    <title>Attendify — Rekap Presensi Siswa</title>
 
     <!-- Normalize or reset CSS with your favorite library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
@@ -19,10 +19,10 @@
         }
 
         #title {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Inter', Arial, Helvetica, sans-serif;
             font-size: 18px;
             font-weight: bold;
-
+            color: #0D1442;
         }
 
         @media screen {
@@ -48,9 +48,10 @@
         }
 
         .tabelpresensi tr th {
-            border: 1px solid #000000;
+            border: 1px solid #1E2A78;
             padding: 8px;
-            background-color: rgb(214, 214, 214);
+            background-color: #EEF0FE;
+            color: #0D1442;
             font-size: 10px;
         }
 

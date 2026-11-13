@@ -28,18 +28,33 @@
         <div class="section" id="menu-section">
             <div class="card attendify-card">
                 <div class="card-body text-center">
-                    <a href="/presensi/create" class="attendify-cta-presensi">
-                        <div class="attendify-cta-presensi__left">
-                            <span class="attendify-cta-presensi__icon">
-                                <ion-icon name="camera-outline"></ion-icon>
-                            </span>
-                            <div>
-                                <p class="attendify-cta-presensi__title">Ambil Presensi Hari Ini</p>
-                                <p class="attendify-cta-presensi__sub">Verifikasi koordinat GPS &amp; foto selfie</p>
+                    @if ($presensitoday == null)
+                        <a href="/presensi/create" class="attendify-cta-presensi">
+                            <div class="attendify-cta-presensi__left">
+                                <span class="attendify-cta-presensi__icon">
+                                    <ion-icon name="camera-outline"></ion-icon>
+                                </span>
+                                <div>
+                                    <p class="attendify-cta-presensi__title">Ambil Presensi Masuk</p>
+                                    <p class="attendify-cta-presensi__sub">Belum absen hari ini &bull; Verifikasi GPS &amp; selfie</p>
+                                </div>
                             </div>
-                        </div>
-                        <ion-icon name="chevron-forward-outline" class="attendify-cta-presensi__arrow"></ion-icon>
-                    </a>
+                            <ion-icon name="chevron-forward-outline" class="attendify-cta-presensi__arrow"></ion-icon>
+                        </a>
+                    @elseif ($presensitoday->jam_out == null)
+                        <a href="/presensi/create" class="attendify-cta-presensi attendify-cta-presensi--out">
+                            <div class="attendify-cta-presensi__left">
+                                <span class="attendify-cta-presensi__icon">
+                                    <ion-icon name="walk-outline"></ion-icon>
+                                </span>
+                                <div>
+                                    <p class="attendify-cta-presensi__title">Ambil Presensi Pulang</p>
+                                    <p class="attendify-cta-presensi__sub">Masuk tercatat {{ $presensitoday->jam_in }} &bull; Ketuk saat jam pulang</p>
+                                </div>
+                            </div>
+                            <ion-icon name="chevron-forward-outline" class="attendify-cta-presensi__arrow"></ion-icon>
+                        </a>
+                    @endif
 
                     <div class="list-menu">
                         <div class="item-menu text-center">
@@ -72,7 +87,7 @@
                                 <span class="text-center">Histori</span>
                             </div>
                         </div>
-                        <div class="item-menu text-center">
+                        <div class="item-menu item-menu--logout text-center">
                             <div class="menu-icon">
                                 <a href="/proseslogout" class="attendify-menu-pink" style="font-size: 40px;">
                                     <ion-icon name="log-out-outline"></ion-icon>
@@ -156,7 +171,7 @@
             <div class="rekappresensi">
                 <h3>Rekap Presensi Bulan {{ $namabulan[$bulanini] }} Tahun {{ $tahunini }}</h3>
                 <div class="row g-3">
-                    <div class="col-6 col-md-3">
+                    <div class="col-6">
                         <div class="card attendify-stat-card">
                             <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--hadir">
@@ -169,7 +184,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3">
+                    <div class="col-6">
                         <div class="card attendify-stat-card">
                             <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--izin">
@@ -183,10 +198,7 @@
                         </div>
                     </div>
 
-                    <!-- Spacer only visible on mobile -->
-                    <div class="d-block d-md-none w-100 mt-2"></div>
-
-                    <div class="col-6 col-md-3">
+                    <div class="col-6">
                         <div class="card attendify-stat-card">
                             <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--pink">
@@ -199,7 +211,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 col-md-3">
+                    <div class="col-6">
                         <div class="card attendify-stat-card">
                             <div class="card-body d-flex align-items-center justify-content-start gap-2">
                                 <div class="presensiicon attendify-stat-badge attendify-stat-badge--terlambat">
@@ -233,57 +245,86 @@
                 </div>
                 <div class="tab-content mt-2" style="margin-bottom:100px;">
                     <div class="tab-pane fade show active" id="home" role="tabpanel">
-                        <ul class="listview image-listview attendify-listview">
-                            @foreach ($historibulanini as $d)
-                            @php
-                                $path = Storage::url('public/uploads/absensi/' . $d->foto_in);
-                            @endphp
-                            <li>
-                                <div class="item">
-                                    <div class="icon-box bg-primary">
-                                        <ion-icon name="finger-print-outline"></ion-icon>
-                                    </div>
-                                    <div class="in">
-                                        {{-- <div>{{ date("d-m-Y",strtotime($d->tgl_presensi))}}</div> --}}
-                                        <div class="font-weight-bold">{{ \Carbon\Carbon::parse($d->tgl_presensi)->translatedFormat('l, d F Y') }}</div>
-                                        <div class="mt-1">
-                                            <span class="badge badge-primary attendify-badge attendify-badge--hadir">{{ $d->jam_in }}</span>
-                                            <span class="badge badge-danger attendify-badge attendify-badge--alpha">{{ $presensitoday != null && $d->jam_out != null ? $d->jam_out : 'Belum Absen' }}</span>
-                                            @php
-                                                $statusColors = [
-                                                    'hadir' => 'primary',
-                                                    'terlambat' => 'warning',
-                                                    'izin' => 'info',
-                                                    'sakit' => 'secondary',
-                                                    'alpha' => 'danger'
-                                                ];
-                                            @endphp
+                        @if ($historibulanini->isEmpty())
+                            <div class="attendify-empty-state attendify-empty-state--tab">
+                                <svg class="attendify-empty-state__svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="2" y="2" width="44" height="44" rx="14" fill="#2E3AC7" fill-opacity="0.08" />
+                                    <path d="M24 11L26.1 18.9L34 21L26.1 23.1L24 31L21.9 23.1L14 21L21.9 18.9L24 11Z" fill="#5AD8E6" />
+                                    <circle cx="34" cy="14" r="2.5" fill="#FFC94D" />
+                                </svg>
+                                <div class="attendify-empty-state__text">
+                                    <p class="attendify-empty-state__title">Belum ada riwayat di bulan ini</p>
+                                    <p class="attendify-empty-state__desc">Catatan presensi Anda selama bulan {{ $namabulan[$bulanini] }} {{ $tahunini }} akan tampil di sini.</p>
+                                </div>
+                            </div>
+                        @else
+                            <ul class="listview image-listview attendify-listview">
+                                @foreach ($historibulanini as $d)
+                                @php
+                                    $path = Storage::url('public/uploads/absensi/' . $d->foto_in);
+                                @endphp
+                                <li>
+                                    <div class="item">
+                                        <div class="icon-box bg-primary">
+                                            <ion-icon name="finger-print-outline"></ion-icon>
+                                        </div>
+                                        <div class="in">
+                                            <div class="attendify-history-date">{{ \Carbon\Carbon::parse($d->tgl_presensi)->translatedFormat('l, d F Y') }}</div>
+                                            <div class="attendify-history-badges">
+                                                @if ($d->jam_in != null)
+                                                    <span class="badge badge-primary attendify-badge attendify-badge--hadir">Masuk {{ $d->jam_in }}</span>
+                                                    <span class="badge badge-danger attendify-badge {{ $d->jam_out != null ? 'attendify-badge--izin' : 'attendify-badge--alpha' }}">
+                                                        {{ $d->jam_out != null ? 'Pulang ' . $d->jam_out : 'Belum Pulang' }}
+                                                    </span>
+                                                @endif
+                                                @php
+                                                    $statusColors = [
+                                                        'hadir' => 'primary',
+                                                        'terlambat' => 'warning',
+                                                        'izin' => 'info',
+                                                        'sakit' => 'secondary',
+                                                        'alpha' => 'danger'
+                                                    ];
+                                                @endphp
 
-                                            <span class="badge badge-{{ $statusColors[$d->status] ?? 'dark' }} attendify-badge attendify-badge--{{ $d->status }}">
-                                                {{ ucfirst($d->status) }}
-                                            </span>
+                                                <span class="badge badge-{{ $statusColors[$d->status] ?? 'dark' }} attendify-badge attendify-badge--{{ $d->status }}">
+                                                    {{ ucfirst($d->status) }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                            @endforeach
-
-                        </ul>
+                                </li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
                     <div class="tab-pane fade" id="profile" role="tabpanel">
-                        <ul class="listview image-listview attendify-listview">
-                            @foreach ( $leaderboard as $d)
-                            <li>
-                                <div class="item">
-                                    <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
-                                    <div class="in">
-                                        <div class="font-weight-bold">{{$d->nama_lengkap}}</div>
-                                        {{-- <span class="text-muted">Designer</span> --}}
-                                    </div>
+                        @if ($leaderboard->isEmpty())
+                            <div class="attendify-empty-state attendify-empty-state--tab">
+                                <svg class="attendify-empty-state__svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <rect x="2" y="2" width="44" height="44" rx="14" fill="#FFC94D" fill-opacity="0.16" />
+                                    <path d="M24 11L26.1 18.9L34 21L26.1 23.1L24 31L21.9 23.1L14 21L21.9 18.9L24 11Z" fill="#2E3AC7" />
+                                </svg>
+                                <div class="attendify-empty-state__text">
+                                    <p class="attendify-empty-state__title">Leaderboard belum tersedia</p>
+                                    <p class="attendify-empty-state__desc">Daftar siswa yang hadir paling awal hari ini akan muncul di sini.</p>
                                 </div>
-                            </li>
-                            @endforeach
-                        </ul>
+                            </div>
+                        @else
+                            <ul class="listview image-listview attendify-listview">
+                                @foreach ( $leaderboard as $d)
+                                <li>
+                                    <div class="item">
+                                        <img src="assets/img/sample/avatar/avatar1.jpg" alt="image" class="image">
+                                        <div class="in">
+                                            <div class="font-weight-bold">{{$d->nama_lengkap}}</div>
+                                            <span class="attendify-rank-pill {{ $loop->iteration == 1 ? 'attendify-rank-pill--top1' : '' }}">#{{ $loop->iteration }}</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
 
                 </div>

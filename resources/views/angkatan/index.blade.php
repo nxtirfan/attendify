@@ -4,8 +4,7 @@
         <div class="container-xl">
             <div class="row g-2 align-items-center">
                 <div class="col">
-                    <!-- Page pre-title -->
-
+                    <div class="page-pretitle">Data Master</div>
                     <h2 class="page-title">Data Angkatan</h2>
                 </div>
             </div>
@@ -25,7 +24,7 @@
                                         <div class="alert alert-success">{{ Session::get('success') }}</div>
                                     @endif
                                     @if (Session::get('warning'))
-                                        <div class="alert alert-success">{{ Session::get('warning')}}</div>
+                                        <div class="alert alert-warning">{{ Session::get('warning')}}</div>
                                     @endif
                                 </div>
                             </div>
@@ -81,7 +80,8 @@
                             <!-- BEGIN TABLE -->
                             <div class="row mt-2">
                                 <div class="col-12">
-                                    <table class="table table-bordered">
+                                    <div class="table-responsive">
+                                    <table class="table table-bordered table-vcenter table-hover">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -137,6 +137,7 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                             </div>
                             <!-- END TABLE -->
