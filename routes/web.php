@@ -66,7 +66,7 @@ Route::middleware(['guest'])->group(function () {
         return view('auth.login');
     })->name('login');
 
-    Route::post('/proseslogin', [AuthController::class, 'proseslogin'])->name('proseslogin');
+    Route::post('/proseslogin', [AuthController::class, 'proseslogin'])->name('proseslogin')->middleware('throttle:5,1');
 });
 
 // Rute hanya bisa diakses oleh user yang SUDAH login

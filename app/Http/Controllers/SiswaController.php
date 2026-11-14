@@ -103,6 +103,23 @@ class SiswaController extends Controller
         return strtolower($utama . $inisialAkhir);
     }
 
+    // Tentukan nama file foto siswa: null (tidak upload), false (tidak valid), atau nama file
+    private function fotoSiswa(Request $request, $nis)
+    {
+        if (!$request->hasFile('foto')) {
+            return null;
+        }
+
+        // Whitelist tipe foto untuk mencegah upload file berbahaya
+        $ext = strtolower($request->file('foto')->getClientOriginalExtension());
+        $mime = $request->file('foto')->getMimeType();
+        if (!in_array($ext, ['jpg', 'jpeg', 'png']) || !in_array($mime, ['image/jpeg', 'image/png']) || $request->file('foto')->getSize() > 2097152) {
+            return false;
+        }
+
+        return $nis . "." . $ext; // Nama file dipaksa memakai ekstensi yang di-whitelist
+    }
+
     public function store(Request $request)
     {
         $nis = $request->nis;
@@ -110,6 +127,19 @@ class SiswaController extends Controller
         $kelas = $request->kelas;
         $no_hp = $request->no_hp;
         $angkatan_id = $request->angkatan_id;
+
+        // Validasi dasar data siswa sebelum masuk database
+        if (trim((string) $nis) === '' || trim((string) $nama_lengkap) === '' || empty($angkatan_id)) {
+            return Redirect::back()->with('warning', 'NIS, nama lengkap, dan angkatan wajib diisi');
+        }
+        if (mb_strlen($nama_lengkap) > 100 || mb_strlen((string) $no_hp) > 20) {
+            return Redirect::back()->with('warning', 'Nama maksimal 100 karakter dan nomor HP maksimal 20 karakter');
+        }
+
+        $foto = $this->fotoSiswa($request, $nis);
+        if ($foto === false) {
+            return Redirect::back()->with('warning', 'Foto harus berformat JPG/PNG dan berukuran maksimal 2MB');
+        }
 
         // // 1. Generate username dari nama_lengkap
         // $namaArr = explode(' ', trim($nama_lengkap));
@@ -139,7 +169,7 @@ class SiswaController extends Controller
             'kelas' => $kelas,
             'no_hp' => $no_hp,
             'angkatan_id' => $angkatan_id,
-            'foto' => $request->hasFile('foto') ? $nis . "." . $request->file('foto')->getClientOriginalExtension() : null,
+            'foto' => $foto,
         ];
 
         try {
@@ -181,14 +211,21 @@ class SiswaController extends Controller
         $no_hp = $request->no_hp;
         $angkatan_id = $request->angkatan_id;
 
+        // Validasi dasar data siswa sebelum masuk database
+        if (trim((string) $nis) === '' || trim((string) $nama_lengkap) === '' || empty($angkatan_id)) {
+            return Redirect::back()->with('warning', 'NIS, nama lengkap, dan angkatan wajib diisi');
+        }
+        if (mb_strlen($nama_lengkap) > 100 || mb_strlen((string) $no_hp) > 20) {
+            return Redirect::back()->with('warning', 'Nama maksimal 100 karakter dan nomor HP maksimal 20 karakter');
+        }
+
         // Foto lama diambil dari database, bukan dari request (tidak bisa dipercaya)
         $siswa = DB::table('siswa')->where('nis', $nis)->first();
         $old_foto = $siswa->foto;
 
-        if ($request->hasFile('foto')) {
-            $foto = $nis . "." . $request->file('foto')->getClientOriginalExtension();
-        } else {
-            $foto = $old_foto;
+        $foto = $this->fotoSiswa($request, $nis) ?? $old_foto;
+        if ($foto === false) {
+            return Redirect::back()->with('warning', 'Foto harus berformat JPG/PNG dan berukuran maksimal 2MB');
         }
 
         $data = [

@@ -42,6 +42,11 @@ class PresensiController extends Controller
 
         $lokasi = $request->lokasi; // Ambil lokasi
         $lokasiuser = explode(',', $lokasi); // Pisahkan lokasi menjadi array
+        if (count($lokasiuser) < 2 || !is_numeric(trim($lokasiuser[0])) || !is_numeric(trim($lokasiuser[1]))) {
+            // Lokasi kosong atau bukan koordinat ditolak sebelum dihitung
+            echo "error|Lokasi tidak valid, aktifkan izin lokasi lalu coba lagi|radius";
+            return;
+        }
         $latitudeuser = $lokasiuser[0]; // Ambil latitude
         $longitudeuser = $lokasiuser[1]; // Ambil longitude
 
@@ -65,10 +70,24 @@ class PresensiController extends Controller
         }
 
         $image = $request->image; // Ambil file gambar
+        if (empty($image) || strlen($image) > 5242880) {
+            // Batasi payload base64 (~4MB gambar hasil decode) agar tidak membebani memori
+            echo "error|Foto presensi kosong atau terlalu besar|$ket";
+            return;
+        }
         $folderPath = "public/uploads/absensi/";
         $formatName = $nis . "-" . $tgl_presensi . "-" . $ket; // Format nama file berdasarkan NIS dan tanggal presensi
         $image_parts = explode(";base64,", $image);
+        if (count($image_parts) < 2) {
+            echo "error|Format foto presensi tidak dikenali|$ket";
+            return;
+        }
         $image_base64 = base64_decode($image_parts[1]);
+        if ($image_base64 === false || strlen($image_base64) < 1024 || substr($image_base64, 0, 8) !== "\x89PNG\r\n\x1a\n") {
+            // Decode gagal, terlalu kecil, atau bukan PNG asli
+            echo "error|Foto presensi tidak dapat diproses|$ket";
+            return;
+        }
         $fileName = $formatName . ".png"; // Format nama file
         $file = $folderPath . $fileName;
 
@@ -175,14 +194,32 @@ class PresensiController extends Controller
     {
         $user_id = Auth::user()->user_id; // Ambil ID user yang sedang login
         $nis = Auth::user()->siswa->nis; // Ambil ID siswa dari user yang sedang login
-        $nama_lengkap = $request->nama_lengkap; // Ambil nama lengkap dari input
-        $no_hp = $request->no_hp; // Ambil nomor HP dari input
-        $password = Hash::make($request->password); // Hash password yang diinput
+        $nama_lengkap = trim($request->input('nama_lengkap', '')); // Ambil nama lengkap dari input
+        $no_hp = trim($request->input('no_hp', '')); // Ambil nomor HP dari input
+        $password = $request->input('password'); // Password dihash setelah lolos validasi
         $siswa = DB::table('siswa')->where('nis', $nis)->first(); // Ambil data siswa berdasarkan NIS
+
+        // Validasi dasar identitas dan password
+        if ($nama_lengkap === '' || mb_strlen($nama_lengkap) > 100) {
+            return Redirect::back()->with('error', 'Nama lengkap wajib diisi, maksimal 100 karakter');
+        }
+        if (mb_strlen($no_hp) > 20) {
+            return Redirect::back()->with('error', 'Nomor HP maksimal 20 karakter');
+        }
+        if (!empty($password) && strlen($password) < 6) {
+            return Redirect::back()->with('error', 'Password minimal 6 karakter');
+        }
+        $password = Hash::make($password);
 
         // Cek apakah ada file foto yang diupload
         if ($request->hasFile('foto')) {
-            $foto = $nis . "." . $request->file('foto')->getClientOriginalExtension(); // Ambil file foto
+            // Whitelist tipe foto untuk mencegah upload file berbahaya
+            $ext = strtolower($request->file('foto')->getClientOriginalExtension());
+            $mime = $request->file('foto')->getMimeType();
+            if (!in_array($ext, ['jpg', 'jpeg', 'png']) || !in_array($mime, ['image/jpeg', 'image/png']) || $request->file('foto')->getSize() > 2097152) {
+                return Redirect::back()->with('error', 'Foto harus berformat JPG/PNG dan berukuran maksimal 2MB');
+            }
+            $foto = $nis . "." . $ext; // Nama file dipaksa memakai ekstensi yang di-whitelist
         } else {
             $foto = $siswa->foto; // Jika tidak ada foto yang diupload, gunakan foto lama
         }
@@ -282,7 +319,15 @@ class PresensiController extends Controller
 
         $tgl_izin = $request->tgl_izin; // Ambil tanggal izin dari input
         $status = $request->status; // Ambil status izin dari input
-        $keterangan = $request->keterangan; // Ambil keterangan izin dari input
+        $keterangan = trim($request->keterangan); // Ambil keterangan izin dari input
+
+        // Validasi dasar data izin sebelum masuk database
+        if (!in_array($status, ['izin', 'sakit']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $tgl_izin) || strtotime($tgl_izin) === false) {
+            return redirect('/presensi/izin')->with('error', 'Status dan tanggal izin tidak valid');
+        }
+        if ($keterangan === '' || mb_strlen($keterangan) > 255) {
+            return redirect('/presensi/izin')->with('error', 'Keterangan wajib diisi, maksimal 255 karakter');
+        }
 
         $data = [
             'siswa_id' => $siswa_id, // ID siswa
