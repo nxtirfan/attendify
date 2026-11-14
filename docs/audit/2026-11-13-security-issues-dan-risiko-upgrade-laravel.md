@@ -195,3 +195,47 @@ tidak akan menerima patch resmi. Risiko ini naik seiring waktu.
 4. **E4:** pilih PHP 8.3/8.4 terbaru saat provisioning EC2 (bukan PHP 8.1 milik Laragon).
 5. **E5 (keputusan terpisah):** upgrade Laravel 11/12 — setelah demo TA atau sebelum rilis
    final, dengan daftar uji 5.4.
+
+## 7. Status Penutupan Batch E (Update 15 November 2026)
+
+E1–E3 dieksekusi pada 13–15 November 2026:
+
+| Item | Komit | Isi |
+| --- | --- | --- |
+| E1 | `a4d5524` | laravel/framework 10.48.28 → 10.50.4 + seluruh dependency dalam rentang (guzzle 7.16.1, psr7 2.13.3, symfony 6.4.x terbaru, phpunit 10.5.67). `composer audit` tersisa advisory laravel/framework yang fix-nya hanya di major 11/12/13 → memperkuat kebutuhan E5 |
+| E2 | `5bb0b22` | V1 ditutup (whitelist jpg/jpeg/png + mime check + maks 2MB di `updateprofile` dan CRUD siswa via helper `fotoSiswa`), V3 ditutup (throttle 5/menit di `/proseslogin`), V6/V8/V9 ditutup (validasi storeizin/updateprofile/store siswa, batas base64 4MB + cek magic byte PNG, guard koordinat lokasi) |
+| E3 | (dokumen ini + `.env.production.example`) | konfigurasi produksi: APP_DEBUG=false, APP_ENV=production, LOG stderr, SESSION_SECURE_COOKIE=true, SAMESITE=lax, DB user non-root |
+| E4 | belum | pilih PHP 8.3/8.4 saat provisioning EC2 |
+| E5 | belum | upgrade major Laravel, keputusan tim |
+
+## 8. Checklist Deployment Security (AWS)
+
+Wajib dipenuhi sebelum aplikasi dipublikasikan:
+
+1. **Environment produksi** — salin `.env.production.example` ke `.env` di server, isi
+   `APP_KEY` baru (`php artisan key:generate`), `APP_URL` domain nyata, kredensial DB.
+   `APP_DEBUG=false` dan `APP_ENV=production` tidak boleh diubah.
+2. **HTTPS wajib** — pasang sertifikat (Let's Encrypt/Certbot atau ALB). Alasan ganda:
+   cookie sesi `secure` dan Geolocation API hanya berjalan pada konteks aman (HTTPS).
+3. **Cookie sesi** — `SESSION_SECURE_COOKIE=true`, `SESSION_SAMESITE=lax`,
+   `SESSION_HTTPONLY=true` (default Laravel).
+4. **Database** — user DB bukan root dan password kuat (V10); port 3306 tidak
+   dipublikasikan, akses hanya dari security group aplikasi (RDS private subnet).
+5. **PHP** — versi 8.3/8.4 terbaru (E4), bukan PHP 8.1 Laragon; `expose_php=Off`,
+   `display_errors=Off`, `log_errors=On`.
+6. **Deny eksekusi PHP pada folder upload** — foto disimpan di
+   `storage/app/public/uploads/{absensi,siswa}` yang disajikan via symlink
+   `public/storage`. Konfigurasi server harus memastikan file di bawah `/storage`
+   hanya disajikan statis:
+   - nginx: blok `location /storage/` tanpa pass ke PHP-FPM + `location ~* /storage/.*\.(php|phtml|phar)$ { deny all; }`
+   - Apache: `.htaccess` di `storage/` dengan `php_flag engine off` atau `<FilesMatch "\.(php|phtml|phar)$"> Require all denied </FilesMatch>`
+7. **`php artisan storage:link`** dijalankan sekali setelah deploy; ulangi jika server diganti.
+8. **Optimasi** — `php artisan config:cache`, `route:cache`, `view:cache` setelah deploy.
+9. **Rate limit** — sudah diterapkan pada login (5 percobaan/menit per IP); pertimbangkan
+   throttle global 60/menit pada grup web jika beban tinggi.
+10. **Backup** — jadwal backup/mysqldump database; `.env` tidak pernah masuk git dan tidak
+    boleh ikut di file backup publik.
+11. **Password siswa default = NIS (V5)** — sifatnya masih aktif; tetapkan kebijakan:
+    wajib ganti password via Ubah Profil, dan ditegaskan di panduan/laporan.
+12. **Pemantauan** — `laravel.log` di storage/logs ikut masuk rotasi; cek berkala
+    `composer audit` setiap ada update keamanan baru.
