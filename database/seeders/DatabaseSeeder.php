@@ -39,9 +39,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $dataSiswa = [
+            // Empat anggota Kelompok 9 (SSD-24, 2026) sebagai siswa demo
             ['nis' => '24023', 'nama_lengkap' => 'M Irfan Al Hakim', 'kelas' => 'X', 'angkatan_id' => 24, 'no_hp' => '081200000001'],
-            ['nis' => '23002', 'nama_lengkap' => 'Salfa Putri Lestari', 'kelas' => 'XI', 'angkatan_id' => 23, 'no_hp' => '081200000002'],
-            ['nis' => '22018', 'nama_lengkap' => 'Kanaya Azalea Chandra', 'kelas' => 'XII', 'angkatan_id' => 22, 'no_hp' => '081200000003'],
+            ['nis' => '24033', 'nama_lengkap' => 'Isa Fitri Ulul Firdaus', 'kelas' => 'X', 'angkatan_id' => 24, 'no_hp' => '081200000002'],
+            ['nis' => '24042', 'nama_lengkap' => 'Febriana Dwi Rahayu', 'kelas' => 'X', 'angkatan_id' => 24, 'no_hp' => '081200000003'],
+            ['nis' => '24019', 'nama_lengkap' => 'Riski Cahya Alfiansyah', 'kelas' => 'X', 'angkatan_id' => 24, 'no_hp' => '081200000004'],
         ];
 
         foreach ($dataSiswa as $s) {
@@ -60,6 +62,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        $this->command->info('Seeder dummy selesai. Akun: admin1 (admin123), guru1 (password1), siswa NIS 24023/23002/22018 (password1).');
+        $this->command->info('Seeder dummy selesai. Akun: admin1 (admin123), guru1 (password1), siswa NIS 24023/24033/24042/24019 (password1) - anggota Kelompok 9.');
     }
 }

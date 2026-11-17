@@ -16,6 +16,9 @@
 
 - Database Attendify **bisa dibangun ulang dari repo**: migration + seeder ter-commit,
   sehingga `migrate:fresh --seed` di komputer mana pun menghasilkan database identik.
+- Seeder siswa berisi **4 anggota Kelompok 9 (SSD-24)** sebagai data demo — NIS diambil
+  dari tiga digit terakhir NIM masing-masing (24023, 24033, 24042, 24019), semua
+  angkatan 2024.
 - Migration **tidak menyentuh file foto** di `storage/app/public/uploads/`. Data
   transaksi (presensi, izin, foto) sengaja tidak dibuat seeder karena itu data demo.
 
@@ -43,7 +46,10 @@ terminal dibuka di folder project `D:\Dev\attendify`.
 4. **Verifikasi** di `http://127.0.0.1:8000`:
    - `admin1` / `admin123` (Admin)
    - `guru1` / `password1` (Guru)
-   - siswa NIS `24023`, `23002`, `22018` / `password1` (username otomatis dari nama, tanpa spasi, huruf kecil)
+   - siswa NIS `24023` (M Irfan Al Hakim), `24033` (Isa Fitri Ulul Firdaus),
+     `24042` (Febriana Dwi Rahayu), `24019` (Riski Cahya Alfiansyah) — password
+     `password1`, username otomatis dari nama tanpa spasi huruf kecil
+     (mis. `isafitriululfirdaus`); keempatnya adalah anggota Kelompok 9 (SSD-24)
    - Dashboard siswa menampilkan tombol **Presensi Masuk** (presensi kosong).
 
 ### Cheat-sheet perintah artisan
