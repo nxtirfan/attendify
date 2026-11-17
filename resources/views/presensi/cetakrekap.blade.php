@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <title>Attendify — Rekap Presensi Siswa</title>
+    <title>Attendify â€” Rekap Presensi Siswa</title>
 
     <!-- Normalize or reset CSS with your favorite library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
@@ -98,7 +98,7 @@
         <table style="width: 100%">
             <tr>
                 <td style="width: 30px">
-                    <img src="{{ asset('assets/img/ssd24.jpg') }}" width="70" height="70" alt="">
+                    <img src="{{ asset('assets/img/favicon.png') }}" width="70" height="70" alt="">
                 </td>
                 <td>
                     <span id="title">

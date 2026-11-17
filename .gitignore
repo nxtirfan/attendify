@@ -20,3 +20,6 @@ yarn-error.log
 /.idea
 /.vscode
 desktop.ini
+tools/cloudflared.exe
+*.trycloudflare.com
+backup-*.sql

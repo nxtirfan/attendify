@@ -10,9 +10,12 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * Terima header forwarded dari tunnel (ngrok/cloudflared) dan load balancer
+     * produksi (ALB) supaya URL dan CSRF tetap benar di balik HTTPS proxy.
+     *
      * @var array<int, string>|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.
