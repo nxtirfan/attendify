@@ -24,6 +24,13 @@ Sudah dibuat — **semua tanpa biaya, EC2/RDS TIDAK dijalankan**:
 
 Jumlah instance EC2 saat ini: **0**. Biaya: **$0**, kredit $100 utuh.
 
+**Setup ulang satu klik (Windows):** double-click
+`deploy\windows\setup-aws-prep.bat` — menjalankan `setup-aws-prep.ps1` secara idempoten
+(role IAM, kebijakan SSM, instance profile, security group, launch template). Aman
+dijalankan berulang; **tidak pernah memanggil `RunInstances`**. Kalau kredensial 12 jam
+sudah expired, double-click `setup-aws-prep-with-login.bat` — browser akan terbuka untuk
+`aws login` sebelum persiapan dijalankan.
+
 Belum bisa dilanjut tanpa keputusan: domain/HTTPS, kebutuhan LOAD Balancer dari dosen,
 dan aktivasi layanan RDS (API masih `OptInRequired`).
 
