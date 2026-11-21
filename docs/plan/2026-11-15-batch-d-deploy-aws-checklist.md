@@ -10,6 +10,23 @@
   keamanan Batch E), `docs/panduan/2026-11-15-panduan-database-migration-seeder-backup.md`,
   `docs/panduan/2026-11-15-panduan-setup-aws-dan-agent-toolkit.md`.
 
+## Status Persiapan (21 November 2026)
+
+Sudah dibuat — **semua tanpa biaya, EC2/RDS TIDAK dijalankan**:
+
+| Resource | ID / Nama | Fungsi |
+| --- | --- | --- |
+| IAM Role | `AttendifyEC2Role` + instance profile `AttendifyEC2Profile` | akses SSM Session Manager (tanpa SSH/port 22) |
+| Security Group | `sg-0d13cb9856708663f` (`attendify-app-sg`) | inbound 80/443 publik, kelola via SSM |
+| Launch Template | `lt-0eebe7ed393ef0d71` (`attendify-lt`) | t3.micro, AMI AL2023 `ami-09a2f74ce8538e414`, EBS 20 GB gp3, `CreditSpecification=standard` (anti CPU-credit boros), IMDSv2 `required`, tag `Project=Attendify`/`Env=demo` |
+| Bootstrap | `deploy/user-data.sh` | PHP 8.3 + Nginx + Composer + clone repo + `storage:link` + cron `schedule:run`; deny PHP di `/storage` |
+| Database lokal | `migrate:fresh --seed` berhasil | 4 siswa tim, 0 presensi, 0 izin |
+
+Jumlah instance EC2 saat ini: **0**. Biaya: **$0**, kredit $100 utuh.
+
+Belum bisa dilanjut tanpa keputusan: domain/HTTPS, kebutuhan LOAD Balancer dari dosen,
+dan aktivasi layanan RDS (API masih `OptInRequired`).
+
 ## 0. Keputusan yang Harus Dikunci Dulu
 
 - [ ] **Domain / subdomain + HTTPS** — wajib karena Geolocation & kamera hanya jalan di
