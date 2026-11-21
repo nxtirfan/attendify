@@ -43,8 +43,7 @@
 
             <div class="attendify-login-card">
                 <div class="section mt-1 attendify-login-header">
-                    <h1>Attendify</h1>
-                    <h4>Sistem Presensi Berbasis GPS dan Selfie</h4>
+                    <h1>Masuk ke akunmu</h1>
 
                     <!-- ✅ Error Alert -->
                     @if($errors->any())

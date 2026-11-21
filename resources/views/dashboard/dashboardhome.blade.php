@@ -121,7 +121,7 @@
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="presencetitle">Presensi Masuk</h4>
-                                        <span class="attendify-presence-time">{{ $presensitoday != null ? $presensitoday->jam_in : 'Belum Absen' }}</span>
+                                        <span class="attendify-presence-time">{{ $presensitoday != null ? $presensitoday->jam_in : '—' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                                     </div>
                                     <div class="presencedetail">
                                         <h4 class="presencetitle">Presensi Pulang</h4>
-                                        <span class="attendify-presence-time">{{ $presensitoday != null && $presensitoday->jam_out != null ? $presensitoday->jam_out : 'Belum Absen' }}</span>
+                                        <span class="attendify-presence-time">{{ $presensitoday != null && $presensitoday->jam_out != null ? $presensitoday->jam_out : '—' }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -151,20 +151,6 @@
                     </div>
                 </div>
 
-                @if ($presensitoday == null)
-                    <div class="attendify-empty-state">
-                        <svg class="attendify-empty-state__svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                            <rect x="2" y="2" width="44" height="44" rx="14" fill="#2E3AC7" fill-opacity="0.10" />
-                            <path d="M24 10L26.4 18.6L35 21L26.4 23.4L24 32L21.6 23.4L13 21L21.6 18.6L24 10Z" fill="#2E3AC7" />
-                            <path d="M35 10L36 13.5L39.5 14.5L36 15.5L35 19L34 15.5L30.5 14.5L34 13.5L35 10Z" fill="#5AD8E6" />
-                            <path d="M14 29L14.8 31.7L17.5 32.5L14.8 33.3L14 36L13.2 33.3L10.5 32.5L13.2 31.7L14 29Z" fill="#F7A8D8" />
-                        </svg>
-                        <div class="attendify-empty-state__text">
-                            <p class="attendify-empty-state__title">Belum ada presensi hari ini</p>
-                            <p class="attendify-empty-state__desc">Ketuk tombol kamera untuk mencatat kehadiran masuk dengan GPS dan selfie.</p>
-                        </div>
-                    </div>
-                @endif
             </div>
 
             <!--Rekap Presensi Bulan Ini Start-->

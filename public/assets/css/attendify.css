@@ -145,7 +145,7 @@ body.attendify-login-body #appCapsule {
     position: relative;
 }
 
-.attendify-login-logo {
+.attendify-login-shell .attendify-login-brand .attendify-login-logo {
     height: 54px;
     width: auto;
     max-width: 230px;
@@ -1514,4 +1514,25 @@ body.attendify-student-body #appCapsule {
 /* Sembunyikan kartu CTA apabila sudah selesai presensi masuk & pulang */
 .attendify-cta-presensi--done {
   display: none !important;
+}
+
+/* Fase 4: Responsive stack kartu presensi Masuk/Pulang pada layar sempit (<= 420px) */
+@media (max-width: 420px) {
+  .attendify-presence-card .card-body {
+    padding: 14px 12px !important;
+  }
+
+  .attendify-presence-card .presencecontent {
+    flex-direction: column;
+    gap: 6px !important;
+  }
+
+  .attendify-presence-card .presencedetail {
+    align-items: center;
+    text-align: center !important;
+  }
+
+  .attendify-presence-card .presencetitle {
+    white-space: nowrap;
+  }
 }
